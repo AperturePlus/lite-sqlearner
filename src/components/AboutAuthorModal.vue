@@ -73,7 +73,7 @@ const handleClose = () => {
 }
 
 .author-intro p {
-  color: #666;
+  color: var(--muted-text);
   line-height: 1.5;
   margin: 0;
   font-size: 14px;
@@ -89,7 +89,7 @@ const handleClose = () => {
 }
 
 .benefits-text {
-  color: #666;
+  color: var(--muted-text);
   font-size: 14px;
   line-height: 1.4;
   margin: 0;
@@ -108,14 +108,14 @@ const handleClose = () => {
 .qrcode-image {
   width: 160px;
   height: 160px;
-  border: 1px solid #e8e8e8;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   object-fit: cover;
 }
 
 .qrcode-text {
   margin-top: 8px;
-  color: #666;
+  color: var(--muted-text);
   font-size: 13px;
 }
 

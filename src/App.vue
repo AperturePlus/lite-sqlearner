@@ -51,6 +51,14 @@
           </a-menu-item>
         </a-menu>
       </a-col>
+      <a-col flex="140px" class="theme-toggle">
+        <a-switch
+          :checked="isDark"
+          checked-children="深色"
+          un-checked-children="浅色"
+          @change="handleThemeChange"
+        />
+      </a-col>
     </a-row>
     <div class="content">
       <router-view />
@@ -76,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { 
   GithubOutlined, 
@@ -85,10 +93,13 @@ import {
   UserOutlined 
 } from "@ant-design/icons-vue";
 import AboutAuthorModal from "./components/AboutAuthorModal.vue";
+import { useGlobalStore } from "./core/globalStore";
 
 const route = useRoute();
 const router = useRouter();
 const selectedKeys = computed(() => [route.path]);
+const globalStore = useGlobalStore();
+const isDark = computed(() => globalStore.theme === "dark");
 
 // 获取当前年份
 const currentYear = computed(() => new Date().getFullYear());
@@ -100,18 +111,31 @@ const showAboutModal = () => {
 };
 
 const doClickMenu = ({ key }: any) => {
-  if (key && key !== "about") {
+  if (key && key !== "about" && key !== "theme") {
     router.push({
       path: key,
     });
   }
 };
+
+const handleThemeChange = (checked: boolean) => {
+  globalStore.setTheme(checked ? "dark" : "light");
+};
+
+watch(
+  () => globalStore.theme,
+  (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped>
 .header {
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-color);
   padding: 0 24px;
+  background: var(--header-bg);
 }
 
 .ant-menu-horizontal {
@@ -125,17 +149,23 @@ const doClickMenu = ({ key }: any) => {
 .title {
   margin-left: 8px;
   font-size: 20px;
-  color: #000;
+  color: var(--text-color);
 }
 
 .content {
   padding: 24px;
 }
 
+.theme-toggle {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
 .footer {
   padding: 12px;
   text-align: center;
-  background: #efefef;
+  background: var(--footer-bg);
 
   p {
     margin-bottom: 4px;

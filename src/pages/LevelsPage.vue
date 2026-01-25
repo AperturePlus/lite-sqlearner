@@ -119,12 +119,12 @@ const getDifficultyText = (difficulty?: number) => {
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 8px;
-  color: #1f2937;
+  color: var(--text-color);
 }
 
 .page-description {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--muted-text);
   margin: 0;
 }
 
@@ -148,7 +148,7 @@ const getDifficultyText = (difficulty?: number) => {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 0;
-  color: #1f2937;
+  color: var(--text-color);
 }
 
 /* 关卡网格 */
@@ -162,8 +162,8 @@ const getDifficultyText = (difficulty?: number) => {
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -221,7 +221,7 @@ const getDifficultyText = (difficulty?: number) => {
   font-size: 15px;
   font-weight: 600;
   margin: 0 0 6px 0;
-  color: #1f2937;
+  color: var(--text-color);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -236,7 +236,7 @@ const getDifficultyText = (difficulty?: number) => {
 
 .level-difficulty {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--muted-text);
 }
 
 .level-action {
@@ -318,27 +318,6 @@ const getDifficultyText = (difficulty?: number) => {
   
   .level-grid::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
-  }
-}
-
-/* 暗色模式适配 */
-@media (prefers-color-scheme: dark) {
-  .level-card {
-    background: #1f2937;
-    border-color: #374151;
-    color: #f9fafb;
-  }
-  
-  .level-title {
-    color: #f9fafb;
-  }
-  
-  .section-title {
-    color: #f9fafb;
-  }
-  
-  .page-title {
-    color: #f9fafb;
   }
 }
 

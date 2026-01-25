@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import {
   CSSProperties,
+  computed,
   onMounted,
   onUnmounted,
   ref,
@@ -29,6 +30,7 @@ import { QueryExecResult } from "sql.js";
 // eslint-disable-next-line no-undef
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import { message } from "ant-design-vue";
+import { useGlobalStore } from "../core/globalStore";
 
 (self as any).MonacoEnvironment = {
   getWorker(_: any, label: any) {
@@ -54,6 +56,10 @@ const { level, onSubmit } = toRefs(props);
 const inputEditor = ref<IStandaloneCodeEditor>();
 const editorRef = ref<HTMLElement>();
 const db = ref();
+const globalStore = useGlobalStore();
+const editorTheme = computed(() =>
+  globalStore.theme === "dark" ? "vs-dark" : "vs"
+);
 
 watchEffect(async () => {
   // 初始化 / 更新默认 SQL
@@ -118,7 +124,7 @@ onMounted(async () => {
     inputEditor.value = monaco.editor.create(editorRef.value, {
       value: initValue,
       language: "sql",
-      theme: "vs-dark",
+      theme: editorTheme.value,
       formatOnPaste: true,
       automaticLayout: true,
       fontSize: 16,
@@ -133,6 +139,12 @@ onMounted(async () => {
     //     localStorage.setItem("draft", toRaw(inputEditor.value).getValue());
     //   }
     // }, 3000);
+  }
+});
+
+watchEffect(() => {
+  if (inputEditor.value) {
+    monaco.editor.setTheme(editorTheme.value);
   }
 });
 
