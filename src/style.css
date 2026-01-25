@@ -10,6 +10,7 @@
     --input-bg: #ffffff;
     --code-bg: #f1f5f9;
     --markdown-border: #e5e7eb;
+    --table-row-hover-bg: #fafafa;
 }
 
 [data-theme="dark"] {
@@ -24,6 +25,7 @@
     --input-bg: #111827;
     --code-bg: #0b1220;
     --markdown-border: #334155;
+    --table-row-hover-bg: #374151;
 }
 
 body {
@@ -52,40 +54,48 @@ a {
     color: var(--text-color);
 }
 
-.ant-table-thead > tr > th {
+.ant-table-thead>tr>th {
     background: var(--card-bg);
     color: var(--text-color);
     border-color: var(--border-color);
 }
 
-.ant-table-tbody > tr > td {
-    background: transparent;
+.ant-table-tbody>tr>td {
+    background: var(--card-bg) !important;
     color: var(--text-color);
     border-color: var(--border-color);
+    transition: none !important;
 }
 
-.ant-table-tbody > tr:nth-child(2n) > td {
-    background: transparent;
+.ant-table-tbody>tr:hover>td,
+.ant-table-tbody>tr.ant-table-row:hover>td,
+.ant-table-tbody>tr.ant-table-row-hover>td {
+    background: var(--table-row-hover-bg) !important;
+    transition: none !important;
+}
+
+.ant-table-tbody>tr:nth-child(2n)>td {
+    background: var(--card-bg) !important;
 }
 
 .ant-collapse,
-.ant-collapse > .ant-collapse-item,
+.ant-collapse>.ant-collapse-item,
 .ant-collapse-content,
 .ant-collapse-content-box,
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+.ant-collapse>.ant-collapse-item>.ant-collapse-header {
     background: var(--card-bg);
     color: var(--text-color);
     border-color: var(--border-color);
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header,
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-header-text,
+.ant-collapse>.ant-collapse-item>.ant-collapse-header,
+.ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-header-text,
 .ant-collapse-content,
 .ant-collapse-content-box {
     color: var(--text-color);
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+.ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-arrow {
     color: var(--text-color);
 }
 
@@ -93,8 +103,8 @@ a {
     color: var(--text-color);
 }
 
-.ant-table-tbody > tr > td,
-.ant-table-thead > tr > th {
+.ant-table-tbody>tr>td,
+.ant-table-thead>tr>th {
     color: var(--text-color);
 }
 
