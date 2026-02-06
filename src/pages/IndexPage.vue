@@ -56,7 +56,7 @@ import { format } from "sql-formatter";
 import SqlEditor from "../components/SqlEditor.vue";
 import QuestionBoard from "../components/QuestionBoard.vue";
 import SqlResult from "../components/SqlResult.vue";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, onMounted, onUnmounted } from "vue";
 import { QueryExecResult } from "sql.js";
 import { allLevels, getLevelByKey } from "../levels";
 import { checkResult } from "../core/result";
@@ -83,17 +83,26 @@ const activeKeys = ref([...defaultActiveKeys]);
 const sqlEditorRef = ref<InstanceType<typeof SqlEditor>>();
 
 // 广播当前上下文给 AI 侧边栏
-watch([level], () => {
-  // 发送上下文更新事件
+const broadcastContext = () => {
   const event = new CustomEvent("updateAIContext", {
     detail: {
       content: level.value.content,
-      sql: sqlEditorRef.value?.getCurrentSQL() || ""
+      sql: sqlEditorRef.value?.getCurrentSQL() || "",
+      result: result.value,
+      answerResult: answerResult.value,
+      errorMsg: errorMsgRef.value,
+      resultStatus: resultStatus.value,
+      initSQL: level.value.initSQL,
     }
   });
   window.dispatchEvent(event);
+};
+
+watch([level], () => {
   // 重置折叠面板状态
   activeKeys.value = [...defaultActiveKeys];
+  // 广播初始上下文
+  broadcastContext();
 }, { immediate: true });
 
 /**
@@ -113,11 +122,30 @@ const onSubmit = (
   answerResult.value = answerRes;
   errorMsgRef.value = errorMsg;
   resultStatus.value = checkResult(res, answerRes);
+  // 执行后广播最新上下文
+  broadcastContext();
 };
 
 const highlightCode = (code: string) => {
   return hljs.highlightAuto(code).value;
 };
+
+// 监听 AI 更新编辑器事件
+const handleUpdateEditorSQL = (event: CustomEvent) => {
+  if (event.detail && event.detail.sql && sqlEditorRef.value) {
+    sqlEditorRef.value.setSQL(event.detail.sql);
+    // 可选：自动运行新的 SQL
+    // doSubmit();
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("updateEditorSQL", handleUpdateEditorSQL as EventListener);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("updateEditorSQL", handleUpdateEditorSQL as EventListener);
+});
 
 </script>
 

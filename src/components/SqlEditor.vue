@@ -107,6 +107,16 @@ const getCurrentSQL = () => {
 };
 
 /**
+ * 设置 SQL 内容
+ */
+const setSQL = (sql: string) => {
+  if (!inputEditor.value) {
+    return;
+  }
+  toRaw(inputEditor.value).setValue(sql);
+};
+
+/**
  * 提交结果
  */
 const doSubmit = () => {
@@ -170,6 +180,7 @@ onUnmounted(() => {
 // 暴露方法给父组件
 defineExpose({
   getCurrentSQL,
+  setSQL,
 });
 </script>
 

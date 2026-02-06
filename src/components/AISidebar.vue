@@ -59,6 +59,16 @@
             </div>
             <div class="message-content">
               <md-viewer :value="msg.content" />
+              <!-- AI 回复中的 SQL 代码应用按钮 -->
+              <div v-if="msg.role === 'assistant' && extractSQLFromMessage(msg.content)" class="sql-actions">
+                <a-button 
+                  type="primary" 
+                  size="small" 
+                  @click="applySQLToEditor(extractSQLFromMessage(msg.content)!)"
+                >
+                  ✨ 应用此 SQL
+                </a-button>
+              </div>
             </div>
           </div>
 
@@ -93,6 +103,22 @@
             @click="handleQuickPrompt('这个题目应该怎么写 SQL？请给我一些提示，不要直接给出答案')"
           >
             💡 获取提示
+          </a-button>
+          <a-button
+            size="small"
+            type="primary"
+            danger
+            @click="handleQuickPrompt('我的 SQL 查询结果不正确，请帮我分析原因并给出修正建议')"
+            :disabled="currentResultStatus !== 0"
+          >
+            🔧 修正我的SQL
+          </a-button>
+          <a-button
+            size="small"
+            @click="handleQuickPrompt('我的 SQL 执行出错了，请帮我分析错误原因：' + currentErrorMsg)"
+            :disabled="!currentErrorMsg"
+          >
+            ⚠️ 分析错误
           </a-button>
           <a-button
             size="small"
@@ -162,6 +188,11 @@ const messagesContainer = ref<HTMLElement | null>(null);
 // 当前 SQL 和题目内容
 const currentSQL = ref("");
 const questionContent = ref("");
+const currentResult = ref<any[]>([]);
+const currentAnswerResult = ref<any[]>([]);
+const currentErrorMsg = ref("");
+const currentResultStatus = ref(-1);
+const currentInitSQL = ref("");
 
 // 是否已配置
 const hasConfig = computed(() => {
@@ -192,12 +223,38 @@ const scrollToBottom = () => {
 const getSystemPrompt = () => {
   let prompt = "你是一个 SQL 学习助手，专门帮助用户学习和理解 SQL。使用简洁明了的语言回答问题，适当使用代码示例。";
 
+  // 题目内容
   if (questionContent.value) {
     prompt += `\n\n当前题目内容：\n${questionContent.value}`;
   }
 
+  // 表结构信息
+  if (currentInitSQL.value) {
+    prompt += `\n\n数据库表结构（建表语句）：\n\`\`\`sql\n${currentInitSQL.value}\n\`\`\``;
+  }
+
+  // 用户的 SQL
   if (currentSQL.value) {
     prompt += `\n\n用户当前编写的 SQL：\n\`\`\`sql\n${currentSQL.value}\n\`\`\``;
+  }
+
+  // 执行结果对比
+  if (currentResult.value && currentResult.value.length > 0) {
+    prompt += `\n\n用户 SQL 的执行结果：\n${JSON.stringify(currentResult.value, null, 2)}`;
+  }
+
+  if (currentAnswerResult.value && currentAnswerResult.value.length > 0) {
+    prompt += `\n\n正确答案的执行结果：\n${JSON.stringify(currentAnswerResult.value, null, 2)}`;
+  }
+
+  // 错误信息
+  if (currentErrorMsg.value) {
+    prompt += `\n\n执行错误信息：${currentErrorMsg.value}`;
+  }
+
+  // 结果状态提示
+  if (currentResultStatus.value === 0) {
+    prompt += `\n\n注意：用户的查询结果与正确答案不一致，请帮助分析差异。`;
   }
 
   return prompt;
@@ -207,6 +264,26 @@ const getSystemPrompt = () => {
 const handleQuickPrompt = (prompt: string) => {
   inputText.value = prompt;
   handleSend();
+};
+
+// 应用 SQL 到编辑器
+const applySQLToEditor = (sql: string) => {
+  const event = new CustomEvent("updateEditorSQL", {
+    detail: { sql }
+  });
+  window.dispatchEvent(event);
+  message.success("已应用 SQL 到编辑器");
+};
+
+// 从消息中提取 SQL 代码
+const extractSQLFromMessage = (content: string): string | null => {
+  // 匹配 ```sql ... ``` 格式的代码块
+  const sqlCodeBlockRegex = /```sql\s*\n([\s\S]*?)\n```/i;
+  const match = content.match(sqlCodeBlockRegex);
+  if (match && match[1]) {
+    return match[1].trim();
+  }
+  return null;
 };
 
 // 发送消息
@@ -275,6 +352,11 @@ const handleUpdateContext = (event: CustomEvent) => {
   if (event.detail) {
     currentSQL.value = event.detail.sql || "";
     questionContent.value = event.detail.content || "";
+    currentResult.value = event.detail.result || [];
+    currentAnswerResult.value = event.detail.answerResult || [];
+    currentErrorMsg.value = event.detail.errorMsg || "";
+    currentResultStatus.value = event.detail.resultStatus ?? -1;
+    currentInitSQL.value = event.detail.initSQL || "";
   }
 };
 
@@ -471,5 +553,11 @@ onUnmounted(() => {
   font-size: 12px;
   color: var(--text-secondary);
   margin-top: 4px;
+}
+
+.sql-actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color);
 }
 </style>
