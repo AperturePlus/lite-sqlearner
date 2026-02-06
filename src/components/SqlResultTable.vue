@@ -3,7 +3,7 @@
     class="sql-result-table"
     :columns="columns"
     :data-source="resultData"
-    :row-key="(_, index) => index"
+    :row-key="(_: any, index: number) => index"
     size="middle"
     :pagination="{ hideOnSinglePage: true, pageSize: 20 }"
   />

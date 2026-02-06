@@ -2,7 +2,7 @@
   <a-card
     id="sqlResult"
     title="执行结果"
-    :extra="RESULT_STATUS_INFO_MAP[resultStatus]"
+    :extra="RESULT_STATUS_INFO_MAP[resultStatus as unknown as keyof typeof RESULT_STATUS_INFO_MAP]"
     :bordered="false"
     style="max-height: 420px; overflow-y: auto"
   >

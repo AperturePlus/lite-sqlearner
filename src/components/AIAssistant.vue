@@ -26,7 +26,7 @@
               {{ msg.role === "user" ? "你" : "AI助手" }}
             </div>
             <div class="message-text">
-              <md-viewer :content="msg.content" />
+              <md-viewer :value="msg.content" />
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@
           <div class="message-content">
             <div class="message-role">AI助手</div>
             <div class="message-text">
-              <md-viewer :content="streamingContent || '正在思考...'" />
+              <md-viewer :value="streamingContent || '正在思考...'" />
               <span class="cursor-blink">▋</span>
             </div>
           </div>

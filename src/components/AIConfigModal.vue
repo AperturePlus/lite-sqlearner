@@ -219,7 +219,7 @@ const handleSave = () => {
     return;
   }
 
-  globalStore.setAIConfig({ ...formData.value });
+  globalStore.aiConfig = { ...formData.value };
   message.success("AI 配置已保存！");
   emit("update:visible", false);
 };

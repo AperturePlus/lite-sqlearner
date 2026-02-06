@@ -68,7 +68,7 @@ const doClickMenu = ({ key }: any) => {
 };
 
 const handleThemeChange = (checked: boolean) => {
-  globalStore.setTheme(checked ? "dark" : "light");
+  globalStore.theme = checked ? "dark" : "light";
 };
 
 watch(
