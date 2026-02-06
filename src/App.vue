@@ -76,10 +76,13 @@
         <a href="https://github.com/liyupi" target="_blank">程序员鱼皮</a>
       </p>
     </div>
-    <a-back-top :style="{ right: '24px' }" />
+    <a-back-top :style="{ right: '60px' }" />
     
     <!-- 关于作者弹窗组件 -->
     <AboutAuthorModal v-model:visible="aboutModalVisible" />
+    
+    <!-- AI 助手侧边栏 -->
+    <AISidebar />
   </div>
 </template>
 
@@ -90,9 +93,10 @@ import {
   GithubOutlined, 
   BookOutlined, 
   SolutionOutlined, 
-  UserOutlined 
+  UserOutlined
 } from "@ant-design/icons-vue";
 import AboutAuthorModal from "./components/AboutAuthorModal.vue";
+import AISidebar from "./components/AISidebar.vue";
 import { useGlobalStore } from "./core/globalStore";
 
 const route = useRoute();

@@ -6,6 +6,7 @@
       </a-col>
       <a-col :lg="13" :xs="24">
         <sql-editor
+          ref="sqlEditorRef"
           :level="level"
           :editor-style="{ height: '280px' }"
           :result-status="resultStatus"
@@ -79,13 +80,21 @@ const errorMsgRef = ref<string>();
 const resultStatus = ref<number>(-1);
 const defaultActiveKeys = ["result"];
 const activeKeys = ref([...defaultActiveKeys]);
+const sqlEditorRef = ref<InstanceType<typeof SqlEditor>>();
 
-/**
- * 切换关卡时，重置状态
- */
+// 广播当前上下文给 AI 侧边栏
 watch([level], () => {
+  // 发送上下文更新事件
+  const event = new CustomEvent("updateAIContext", {
+    detail: {
+      content: level.value.content,
+      sql: sqlEditorRef.value?.getCurrentSQL() || ""
+    }
+  });
+  window.dispatchEvent(event);
+  // 重置折叠面板状态
   activeKeys.value = [...defaultActiveKeys];
-});
+}, { immediate: true });
 
 /**
  * 执行结果

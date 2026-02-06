@@ -97,6 +97,16 @@ const doReset = () => {
 };
 
 /**
+ * 获取当前 SQL
+ */
+const getCurrentSQL = () => {
+  if (!inputEditor.value) {
+    return "";
+  }
+  return toRaw(inputEditor.value).getValue();
+};
+
+/**
  * 提交结果
  */
 const doSubmit = () => {
@@ -155,6 +165,11 @@ onUnmounted(() => {
   if (inputEditor.value) {
     toRaw(inputEditor.value).dispose();
   }
+});
+
+// 暴露方法给父组件
+defineExpose({
+  getCurrentSQL,
 });
 </script>
 
