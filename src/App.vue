@@ -4,8 +4,8 @@
       <a-col flex="160px" style="margin: 0 auto">
         <RouterLink to="/">
           <a-row align="middle">
-            <img src="./assets/logo.png" alt="SQL之母" class="logo" />
-            <span class="title">SQL之母</span>
+            <img src="./assets/logo.svg" alt="SQLearner" class="logo" />
+            <span class="title">SQLearner</span>
           </a-row>
         </RouterLink>
       </a-col>
@@ -19,36 +19,7 @@
           <a-menu-item key="/learn">学习</a-menu-item>
           <a-menu-item key="/levels">关卡</a-menu-item>
           <a-menu-item key="/playground">广场</a-menu-item>
-          <a-menu-item>
-            <a href="https://www.code-nav.cn" target="_blank">
-              <a-badge
-                count="new"
-                size="small"
-                :offset="[16, 24]"
-                color="green"
-              >
-                编程导航
-              </a-badge>
-            </a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="https://www.mianshiya.com" target="_blank">
-              <solution-outlined />
-              面试真题
-            </a>
-          </a-menu-item>
-          <a-menu-item key="about">
-            <span @click.stop="showAboutModal" style="cursor: pointer; display: inline-block; width: 100%;">
-              <user-outlined />
-              关于作者
-            </span>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="https://github.com/liyupi/sql-mother" target="_blank">
-              <github-outlined />
-              代码开源，欢迎 star
-            </a>
-          </a-menu-item>
+
         </a-menu>
       </a-col>
       <a-col flex="140px" class="theme-toggle">
@@ -65,21 +36,12 @@
     </div>
     <div class="footer">
       <p>
-        <a-space size="middle">
-          <a href="https://www.code-nav.cn" target="_blank">编程导航</a>
-          <a href="https://www.laoyujianli.com" target="_blank">写简历神器</a>
-          <a href="https://www.mianshiya.com" target="_blank">面试刷题</a>
-        </a-space>
-      </p>
-      <p>
-        SQL之母 - SQL 自学网站 ©{{ currentYear }} by
-        <a href="https://github.com/liyupi" target="_blank">程序员鱼皮</a>
+        SQLearner - SQL 自学网站 ©{{ currentYear }}
       </p>
     </div>
     <a-back-top :style="{ right: '60px' }" />
     
-    <!-- 关于作者弹窗组件 -->
-    <AboutAuthorModal v-model:visible="aboutModalVisible" />
+
     
     <!-- AI 助手侧边栏 -->
     <AISidebar />
@@ -89,13 +51,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { 
-  GithubOutlined, 
-  BookOutlined, 
-  SolutionOutlined, 
-  UserOutlined
-} from "@ant-design/icons-vue";
-import AboutAuthorModal from "./components/AboutAuthorModal.vue";
+ 
 import AISidebar from "./components/AISidebar.vue";
 import { useGlobalStore } from "./core/globalStore";
 
@@ -108,14 +64,10 @@ const isDark = computed(() => globalStore.theme === "dark");
 // 获取当前年份
 const currentYear = computed(() => new Date().getFullYear());
 
-const aboutModalVisible = ref(false);
 
-const showAboutModal = () => {
-  aboutModalVisible.value = true;
-};
 
 const doClickMenu = ({ key }: any) => {
-  if (key && key !== "about" && key !== "theme") {
+  if (key && key !== "theme") {
     router.push({
       path: key,
     });

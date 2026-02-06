@@ -2,8 +2,6 @@ import initSqlJs, { Database, SqlJsStatic } from "sql.js";
 
 /**
  * SQL 执行器
- *
- * @author coder_yupi https://github.com/liyupi
  */
 let SQL: SqlJsStatic;
 
