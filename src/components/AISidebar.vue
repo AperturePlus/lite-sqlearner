@@ -408,7 +408,7 @@ onUnmounted(() => {
 }
 
 .message-user .message-avatar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--link-color);
   color: white;
 }
 
@@ -420,15 +420,20 @@ onUnmounted(() => {
 
 .message-content {
   flex: 1;
-  background: var(--component-bg);
   padding: 12px 16px;
   border-radius: 12px;
   word-wrap: break-word;
   overflow-x: auto;
 }
 
+.message-assistant .message-content {
+  background: var(--component-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
 .message-user .message-content {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--link-color);
   color: white;
 }
 

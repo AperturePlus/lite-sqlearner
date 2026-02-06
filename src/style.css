@@ -192,3 +192,13 @@ a {
 .markdown-body a {
     color: var(--link-color);
 }
+
+/* Dark Mode Drawer Fixes */
+[data-theme="dark"] .ant-drawer-title,
+[data-theme="dark"] .ant-drawer-close {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .ant-drawer-header {
+    border-bottom: 1px solid var(--border-color) !important;
+}
