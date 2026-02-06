@@ -8,7 +8,10 @@
   >
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="API 格式">
-        <a-select v-model:value="formData.provider" @change="handleProviderChange">
+        <a-select
+          v-model:value="formData.provider"
+          @change="handleProviderChange"
+        >
           <a-select-option
             v-for="(name, key) in PROVIDER_NAMES"
             :key="key"
@@ -35,14 +38,18 @@
 
       <a-form-item label="模型">
         <a-input-group compact>
-           <a-auto-complete
+          <a-auto-complete
             v-model:value="formData.model"
             :options="modelOptions"
             style="width: calc(100% - 32px)"
             placeholder="选择或输入模型名称"
             :filter-option="filterModelOption"
           />
-          <a-button @click="fetchModels" :loading="fetchingModels" title="获取模型列表">
+          <a-button
+            :loading="fetchingModels"
+            title="获取模型列表"
+            @click="fetchModels"
+          >
             <template #icon><sync-outlined :spin="fetchingModels" /></template>
           </a-button>
         </a-input-group>
@@ -50,10 +57,11 @@
 
       <a-form-item :wrapper-col="{ offset: 6, span: 18 }">
         <a-space>
-          <a-button @click="handleTest" :loading="testing">
-            测试连接
-          </a-button>
-          <a-tag v-if="testResult" :color="testResult.success ? 'green' : 'red'">
+          <a-button :loading="testing" @click="handleTest"> 测试连接 </a-button>
+          <a-tag
+            v-if="testResult"
+            :color="testResult.success ? 'green' : 'red'"
+          >
             {{ testResult.message }}
           </a-tag>
         </a-space>
@@ -113,8 +121,10 @@ const fetchedModels = ref<string[]>([]);
 const modelOptions = computed(() => {
   // 合并默认模型和获取到的模型
   const defaultModels = DEFAULT_MODELS[formData.value.provider] || [];
-  const allModels = Array.from(new Set([...defaultModels, ...fetchedModels.value]));
-  return allModels.map(model => ({ value: model }));
+  const allModels = Array.from(
+    new Set([...defaultModels, ...fetchedModels.value])
+  );
+  return allModels.map((model) => ({ value: model }));
 });
 
 // 过滤模型选项
@@ -133,7 +143,7 @@ const fetchModels = async () => {
   try {
     const client = createAIClient(formData.value);
     const models = await client.getModels();
-    
+
     if (models.length > 0) {
       fetchedModels.value = models;
       message.success(`成功获取 ${models.length} 个模型`);

@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import hljs from 'highlight.js';
+import hljs from "highlight.js";
 import { format } from "sql-formatter";
 import SqlEditor from "../components/SqlEditor.vue";
 import QuestionBoard from "../components/QuestionBoard.vue";
@@ -93,17 +93,21 @@ const broadcastContext = () => {
       errorMsg: errorMsgRef.value,
       resultStatus: resultStatus.value,
       initSQL: level.value.initSQL,
-    }
+    },
   });
   window.dispatchEvent(event);
 };
 
-watch([level], () => {
-  // 重置折叠面板状态
-  activeKeys.value = [...defaultActiveKeys];
-  // 广播初始上下文
-  broadcastContext();
-}, { immediate: true });
+watch(
+  [level],
+  () => {
+    // 重置折叠面板状态
+    activeKeys.value = [...defaultActiveKeys];
+    // 广播初始上下文
+    broadcastContext();
+  },
+  { immediate: true }
+);
 
 /**
  * 执行结果
@@ -140,13 +144,18 @@ const handleUpdateEditorSQL = (event: CustomEvent) => {
 };
 
 onMounted(() => {
-  window.addEventListener("updateEditorSQL", handleUpdateEditorSQL as EventListener);
+  window.addEventListener(
+    "updateEditorSQL",
+    handleUpdateEditorSQL as EventListener
+  );
 });
 
 onUnmounted(() => {
-  window.removeEventListener("updateEditorSQL", handleUpdateEditorSQL as EventListener);
+  window.removeEventListener(
+    "updateEditorSQL",
+    handleUpdateEditorSQL as EventListener
+  );
 });
-
 </script>
 
 <style>

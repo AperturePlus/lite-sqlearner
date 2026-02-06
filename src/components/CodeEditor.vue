@@ -5,7 +5,15 @@
 </template>
 
 <script setup lang="ts">
-import { CSSProperties, computed, onMounted, onUnmounted, ref, toRaw, watch } from "vue";
+import {
+  CSSProperties,
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+  toRaw,
+  watch,
+} from "vue";
 import * as monaco from "monaco-editor";
 import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 // eslint-disable-next-line no-undef

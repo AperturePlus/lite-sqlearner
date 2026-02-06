@@ -1,11 +1,11 @@
 <template>
   <div class="ai-sidebar-wrapper">
     <!-- 触发按钮 - 悬浮在右侧 -->
-    <div 
-      class="ai-trigger-btn" 
-      @click="toggleSidebar" 
-      :class="{ active: visible }"
+    <div
       v-show="!visible"
+      class="ai-trigger-btn"
+      :class="{ active: visible }"
+      @click="toggleSidebar"
     >
       <robot-outlined />
       <span class="btn-text">AI助手</span>
@@ -17,10 +17,17 @@
       title="🤖 AI 助手"
       placement="right"
       :width="420"
-      :headerStyle="{ background: 'var(--header-bg)', borderBottom: '1px solid var(--border-color)' }"
-      :bodyStyle="{ padding: 0, background: 'var(--bg-color)', height: '100%' }"
-      :contentWrapperStyle="{ boxShadow: '-4px 0 16px rgba(0,0,0,0.1)' }"
-      getContainer="body"
+      :header-style="{
+        background: 'var(--header-bg)',
+        borderBottom: '1px solid var(--border-color)',
+      }"
+      :body-style="{
+        padding: 0,
+        background: 'var(--bg-color)',
+        height: '100%',
+      }"
+      :content-wrapper-style="{ boxShadow: '-4px 0 16px rgba(0,0,0,0.1)' }"
+      get-container="body"
     >
       <template #extra>
         <a-button type="link" size="small" @click="openConfig">
@@ -41,7 +48,7 @@
 
       <div v-else class="chat-container">
         <!-- 消息列表 -->
-        <div class="messages-container" ref="messagesContainer">
+        <div ref="messagesContainer" class="messages-container">
           <div v-if="messages.length === 0" class="empty-chat">
             <bulb-outlined class="empty-icon" />
             <p>有什么 SQL 问题需要帮助吗？</p>
@@ -60,10 +67,15 @@
             <div class="message-content">
               <md-viewer :value="msg.content" />
               <!-- AI 回复中的 SQL 代码应用按钮 -->
-              <div v-if="msg.role === 'assistant' && extractSQLFromMessage(msg.content)" class="sql-actions">
-                <a-button 
-                  type="primary" 
-                  size="small" 
+              <div
+                v-if="
+                  msg.role === 'assistant' && extractSQLFromMessage(msg.content)
+                "
+                class="sql-actions"
+              >
+                <a-button
+                  type="primary"
+                  size="small"
                   @click="applySQLToEditor(extractSQLFromMessage(msg.content)!)"
                 >
                   ✨ 应用此 SQL
@@ -93,14 +105,22 @@
           </a-button>
           <a-button
             size="small"
-            @click="handleQuickPrompt('请帮我分析一下这个 SQL 语句：\n```sql\n' + currentSQL + '\n```')"
             :disabled="!currentSQL"
+            @click="
+              handleQuickPrompt(
+                '请帮我分析一下这个 SQL 语句：\n```sql\n' + currentSQL + '\n```'
+              )
+            "
           >
             🔍 分析SQL
           </a-button>
           <a-button
             size="small"
-            @click="handleQuickPrompt('这个题目应该怎么写 SQL？请给我一些提示，不要直接给出答案')"
+            @click="
+              handleQuickPrompt(
+                '这个题目应该怎么写 SQL？请给我一些提示，不要直接给出答案'
+              )
+            "
           >
             💡 获取提示
           </a-button>
@@ -108,23 +128,31 @@
             size="small"
             type="primary"
             danger
-            @click="handleQuickPrompt('我的 SQL 查询结果不正确，请帮我分析原因并给出修正建议')"
             :disabled="currentResultStatus !== 0"
+            @click="
+              handleQuickPrompt(
+                '我的 SQL 查询结果不正确，请帮我分析原因并给出修正建议'
+              )
+            "
           >
             🔧 修正我的SQL
           </a-button>
           <a-button
             size="small"
-            @click="handleQuickPrompt('我的 SQL 执行出错了，请帮我分析错误原因：' + currentErrorMsg)"
             :disabled="!currentErrorMsg"
+            @click="
+              handleQuickPrompt(
+                '我的 SQL 执行出错了，请帮我分析错误原因：' + currentErrorMsg
+              )
+            "
           >
             ⚠️ 分析错误
           </a-button>
           <a-button
             size="small"
             danger
-            @click="handleClear"
             :disabled="messages.length === 0"
+            @click="handleClear"
           >
             🗑️ 清空
           </a-button>
@@ -141,9 +169,9 @@
           <a-button
             type="primary"
             class="send-btn"
-            @click="handleSend"
             :loading="loading"
             :disabled="!inputText.trim()"
+            @click="handleSend"
           >
             发送
           </a-button>
@@ -221,7 +249,8 @@ const scrollToBottom = () => {
 
 // 构建系统提示
 const getSystemPrompt = () => {
-  let prompt = "你是一个 SQL 学习助手，专门帮助用户学习和理解 SQL。使用简洁明了的语言回答问题，适当使用代码示例。";
+  let prompt =
+    "你是一个 SQL 学习助手，专门帮助用户学习和理解 SQL。使用简洁明了的语言回答问题，适当使用代码示例。";
 
   // 题目内容
   if (questionContent.value) {
@@ -240,11 +269,19 @@ const getSystemPrompt = () => {
 
   // 执行结果对比
   if (currentResult.value && currentResult.value.length > 0) {
-    prompt += `\n\n用户 SQL 的执行结果：\n${JSON.stringify(currentResult.value, null, 2)}`;
+    prompt += `\n\n用户 SQL 的执行结果：\n${JSON.stringify(
+      currentResult.value,
+      null,
+      2
+    )}`;
   }
 
   if (currentAnswerResult.value && currentAnswerResult.value.length > 0) {
-    prompt += `\n\n正确答案的执行结果：\n${JSON.stringify(currentAnswerResult.value, null, 2)}`;
+    prompt += `\n\n正确答案的执行结果：\n${JSON.stringify(
+      currentAnswerResult.value,
+      null,
+      2
+    )}`;
   }
 
   // 错误信息
@@ -269,7 +306,7 @@ const handleQuickPrompt = (prompt: string) => {
 // 应用 SQL 到编辑器
 const applySQLToEditor = (sql: string) => {
   const event = new CustomEvent("updateEditorSQL", {
-    detail: { sql }
+    detail: { sql },
   });
   window.dispatchEvent(event);
   message.success("已应用 SQL 到编辑器");
@@ -366,12 +403,18 @@ const handleOpenSidebar = () => {
 };
 
 onMounted(() => {
-  window.addEventListener("updateAIContext", handleUpdateContext as EventListener);
+  window.addEventListener(
+    "updateAIContext",
+    handleUpdateContext as EventListener
+  );
   window.addEventListener("openAISidebar", handleOpenSidebar);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("updateAIContext", handleUpdateContext as EventListener);
+  window.removeEventListener(
+    "updateAIContext",
+    handleUpdateContext as EventListener
+  );
   window.removeEventListener("openAISidebar", handleOpenSidebar);
 });
 </script>
@@ -525,8 +568,14 @@ onUnmounted(() => {
 }
 
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .quick-actions {

@@ -3,7 +3,9 @@
     <div v-if="!hasConfig" class="no-config">
       <a-empty description="未配置 AI 助手">
         <template #image>
-          <robot-outlined style="font-size: 48px; color: var(--text-secondary)" />
+          <robot-outlined
+            style="font-size: 48px; color: var(--text-secondary)"
+          />
         </template>
         <a-button type="primary" @click="$emit('openConfig')">
           立即配置
@@ -13,7 +15,7 @@
 
     <div v-else class="chat-container">
       <!-- 消息列表 -->
-      <div class="messages-container" ref="messagesContainer">
+      <div ref="messagesContainer" class="messages-container">
         <div
           v-for="(msg, index) in messages"
           :key="index"
@@ -51,14 +53,24 @@
           </a-button>
           <a-button
             size="small"
-            @click="handleQuickPrompt('请帮我分析一下这个 SQL 语句：\\n```sql\\n' + currentSQL + '\\n```')"
             :disabled="!currentSQL"
+            @click="
+              handleQuickPrompt(
+                '请帮我分析一下这个 SQL 语句：\\n```sql\\n' +
+                  currentSQL +
+                  '\\n```'
+              )
+            "
           >
             🔍 分析SQL
           </a-button>
           <a-button
             size="small"
-            @click="handleQuickPrompt('这个题目应该怎么写 SQL？请给我一些提示，不要直接给出答案')"
+            @click="
+              handleQuickPrompt(
+                '这个题目应该怎么写 SQL？请给我一些提示，不要直接给出答案'
+              )
+            "
           >
             💡 获取提示
           </a-button>
@@ -71,17 +83,21 @@
           v-model:value="inputText"
           placeholder="输入你的问题..."
           :auto-size="{ minRows: 2, maxRows: 4 }"
-          @pressEnter="handleSend"
+          @press-enter="handleSend"
         />
         <div class="input-actions">
-          <a-button size="small" @click="handleClear" :disabled="messages.length === 0">
+          <a-button
+            size="small"
+            :disabled="messages.length === 0"
+            @click="handleClear"
+          >
             清空对话
           </a-button>
           <a-button
             type="primary"
-            @click="handleSend"
             :loading="loading"
             :disabled="!inputText.trim()"
+            @click="handleSend"
           >
             发送
           </a-button>
@@ -138,17 +154,17 @@ const scrollToBottom = () => {
 // 构建系统提示
 const getSystemPrompt = () => {
   let prompt = "你是一个 SQL 学习助手，专门帮助用户学习和理解 SQL。";
-  
+
   if (props.questionContent) {
     prompt += `\\n\\n当前题目内容：\\n${props.questionContent}`;
   }
-  
+
   if (props.currentSQL) {
     prompt += `\\n\\n用户当前编写的 SQL：\\n\`\`\`sql\\n${props.currentSQL}\\n\`\`\``;
   }
-  
+
   prompt += "\\n\\n请用简洁明了的语言回答问题，适当使用代码示例。";
-  
+
   return prompt;
 };
 
@@ -304,10 +320,12 @@ watch(
 }
 
 @keyframes blink {
-  0%, 50% {
+  0%,
+  50% {
     opacity: 1;
   }
-  51%, 100% {
+  51%,
+  100% {
     opacity: 0;
   }
 }

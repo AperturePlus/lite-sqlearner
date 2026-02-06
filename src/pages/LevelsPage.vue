@@ -17,10 +17,10 @@
               <a-tag color="blue" size="small">基础必修</a-tag>
             </h2>
           </div>
-          
+
           <div class="level-grid">
-            <div 
-              v-for="(level, index) in mainLevels" 
+            <div
+              v-for="(level, index) in mainLevels"
               :key="level.key"
               class="level-card main-level"
               @click="goToLevel(level.key)"
@@ -50,10 +50,10 @@
               <a-tag color="orange" size="small">实战进阶</a-tag>
             </h2>
           </div>
-          
+
           <div class="level-grid">
-            <div 
-              v-for="level in customLevels" 
+            <div
+              v-for="level in customLevels"
               :key="level.key"
               class="level-card custom-level"
               @click="goToLevel(level.key)"
@@ -62,7 +62,9 @@
                 <h3 class="level-title">{{ level.title }}</h3>
                 <div class="level-meta">
                   <a-tag color="orange" size="small">实战</a-tag>
-                  <span class="level-difficulty">{{ getDifficultyText(level.difficulty) }}</span>
+                  <span class="level-difficulty">{{
+                    getDifficultyText(level.difficulty)
+                  }}</span>
                 </div>
               </div>
               <div class="level-action">
@@ -87,17 +89,16 @@ const goToLevel = (levelKey: string) => {
   router.push(`/learn/${levelKey}`);
 };
 
-
 const getDifficultyText = (difficulty?: number) => {
   switch (difficulty) {
     case 1:
-      return '⭐ 简单';
+      return "⭐ 简单";
     case 2:
-      return '⭐⭐ 中等';
+      return "⭐⭐ 中等";
     case 3:
-      return '⭐⭐⭐ 困难';
+      return "⭐⭐⭐ 困难";
     default:
-      return '⭐⭐ 中等';
+      return "⭐⭐ 中等";
   }
 };
 </script>
@@ -249,34 +250,34 @@ const getDifficultyText = (difficulty?: number) => {
   #levelsPage {
     padding: 0 12px;
   }
-  
+
   .page-title {
     font-size: 24px;
   }
-  
+
   .section-title {
     font-size: 18px;
   }
-  
+
   .level-card {
     padding: 10px 12px;
   }
-  
+
   .level-title {
     font-size: 14px;
   }
-  
+
   .main-level .level-number,
   .custom-level .level-icon {
     width: 28px;
     height: 28px;
     margin-right: 10px;
   }
-  
+
   .main-level .level-number {
     font-size: 12px;
   }
-  
+
   .custom-level .level-icon {
     font-size: 16px;
   }
@@ -288,7 +289,7 @@ const getDifficultyText = (difficulty?: number) => {
     align-items: flex-start;
     gap: 4px;
   }
-  
+
   .level-action {
     margin-left: 8px;
   }
@@ -301,21 +302,21 @@ const getDifficultyText = (difficulty?: number) => {
     overflow-y: auto;
     padding-right: 8px;
   }
-  
+
   .level-grid::-webkit-scrollbar {
     width: 4px;
   }
-  
+
   .level-grid::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 2px;
   }
-  
+
   .level-grid::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 2px;
   }
-  
+
   .level-grid::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
   }
@@ -326,7 +327,7 @@ const getDifficultyText = (difficulty?: number) => {
   .level-card {
     transition: none;
   }
-  
+
   .level-card:active {
     transform: scale(0.98);
   }

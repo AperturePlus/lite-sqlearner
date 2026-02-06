@@ -87,11 +87,12 @@ const doFormat = () => {
 };
 
 /**
- * 重置
+ * 重置（同时重建数据库，清除用户对数据的污染）
  */
-const doReset = () => {
+const doReset = async () => {
   if (inputEditor.value) {
     toRaw(inputEditor.value).setValue(level.value.defaultSQL);
+    db.value = await initDB(level.value.initSQL);
     doSubmit();
   }
 };
@@ -118,8 +119,9 @@ const setSQL = (sql: string) => {
 
 /**
  * 提交结果
+ * 答案 SQL 在独立的 DB 实例上运行，防止用户通过 INSERT/UPDATE/DELETE/DDL 污染数据影响判题
  */
-const doSubmit = () => {
+const doSubmit = async () => {
   if (!inputEditor.value) {
     return;
   }
@@ -127,7 +129,10 @@ const doSubmit = () => {
   console.log("inputStr", inputStr);
   try {
     const result = runSQL(db.value, inputStr);
-    const answerResult = runSQL(db.value, level.value.answer);
+    // 答案在全新的干净 DB 上执行，隔离用户操作
+    const answerDB = await initDB(level.value.initSQL);
+    const answerResult = runSQL(answerDB, level.value.answer);
+    answerDB.close();
     // 向外层传递结果
     onSubmit?.value(inputStr, result, answerResult);
   } catch (error: any) {

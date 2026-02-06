@@ -19,7 +19,6 @@
           <a-menu-item key="/learn">学习</a-menu-item>
           <a-menu-item key="/levels">关卡</a-menu-item>
           <a-menu-item key="/playground">广场</a-menu-item>
-
         </a-menu>
       </a-col>
       <a-col flex="140px" class="theme-toggle">
@@ -35,14 +34,10 @@
       <router-view />
     </div>
     <div class="footer">
-      <p>
-        SQLearner - SQL 自学网站 ©{{ currentYear }}
-      </p>
+      <p>SQLearner - SQL 自学网站 ©{{ currentYear }}</p>
     </div>
     <a-back-top :style="{ right: '60px' }" />
-    
 
-    
     <!-- AI 助手侧边栏 -->
     <AISidebar />
   </div>
@@ -51,7 +46,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
- 
+
 import AISidebar from "./components/AISidebar.vue";
 import { useGlobalStore } from "./core/globalStore";
 
@@ -63,8 +58,6 @@ const isDark = computed(() => globalStore.theme === "dark");
 
 // 获取当前年份
 const currentYear = computed(() => new Date().getFullYear());
-
-
 
 const doClickMenu = ({ key }: any) => {
   if (key && key !== "theme") {
