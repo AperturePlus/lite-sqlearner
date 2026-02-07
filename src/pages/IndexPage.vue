@@ -272,7 +272,8 @@ onUnmounted(() => {
   top: 24px;
   height: calc(100vh - 48px);
   max-height: calc(100vh - 48px);
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .level-sidebar.collapsed {

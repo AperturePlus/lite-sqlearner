@@ -117,11 +117,15 @@ const toNextLevel = () => {
   background: rgba(0, 0, 0, 0.2);
 }
 
-:global([data-theme="dark"] #questionBoard #questionCard::-webkit-scrollbar-thumb) {
+:global([data-theme="dark"]
+    #questionBoard
+    #questionCard::-webkit-scrollbar-thumb) {
   background: rgba(148, 163, 184, 0.35);
 }
 
-:global([data-theme="dark"] #questionBoard #questionCard::-webkit-scrollbar-thumb:hover) {
+:global([data-theme="dark"]
+    #questionBoard
+    #questionCard::-webkit-scrollbar-thumb:hover) {
   background: rgba(148, 163, 184, 0.5);
 }
 </style>

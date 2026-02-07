@@ -379,7 +379,8 @@ watch(
   background: rgba(148, 163, 184, 0.35);
 }
 
-:global([data-theme="dark"] .messages-container::-webkit-scrollbar-thumb:hover) {
+:global([data-theme="dark"]
+    .messages-container::-webkit-scrollbar-thumb:hover) {
   background: rgba(148, 163, 184, 0.5);
 }
 </style>

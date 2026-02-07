@@ -4,13 +4,9 @@
 >
 > By [程序员鱼皮](https://docs.qq.com/doc/DUFFRVWladXVjeUxW) ，一人全役
 
-
-
 在线体验：http://sqlmother.yupi.icu
 
 视频演示：https://www.bilibili.com/video/BV1pV4y1i7LW
-
-
 
 ## 项目介绍
 
@@ -20,8 +16,6 @@
 
 ![](./doc/index.png)
 
-
-
 ### 为什么做这样一个网站？
 
 首先，SQL 知识极为重要，几乎是程序员、产品经理、数据分析同学的必备技能。
@@ -29,8 +23,6 @@
 对于 SQL 的学习，比起看教程，更适合通过实战来入门。网上虽然也有类似的 SQL 自学网，但是要么收费、要么不够体系化。
 
 所以鱼皮决定自己动手，搞一个开源的 SQL 学习网，一方面希望能够帮助大家更轻松地入门 SQL；另一方面，也希望项目代码也能给大家一些启发，让更多同学有机会参与进来成为贡献者，一起做好一个项目！
-
-
 
 ## 20 秒学会使用
 
@@ -48,9 +40,6 @@
 
 ![选择关卡](./doc/levels.png)
 
-
-
-
 ## 1 分钟本地启动
 
 由于项目采用纯前端实现，本地启动项目非常简单！
@@ -62,8 +51,6 @@
 2）进入项目根目录，执行 `npm install` 安装项目依赖
 
 3）执行 `npm run dev` 本地启动即可
-
-
 
 ## 功能和特性
 
@@ -81,11 +68,7 @@
   - 自定义关卡
 - SQL 广场（自由输入 SQL）
 
-
-
 ![SQL 广场](./doc/sql-playground.png)
-
-
 
 ## 技术选型
 
@@ -94,8 +77,6 @@
 > Q：为什么采用纯前端实现？
 >
 > A：减少攻击风险 + 省钱 + 新的学习尝试
-
-
 
 - 主框架：Vue 3
 - 组件库：ant-design-vue
@@ -106,8 +87,6 @@
 - 全局状态管理：pinia + pinia-plugin-persistedstate
 - 前端工程化：typescript + eslint + prettier
 - 工具库：lodash
-
-
 
 ## 核心设计
 
@@ -120,8 +99,6 @@
 - 题目结果区（SqlResult）：封装了题目执行结果的展示
 
 然后在 `IndexPage.vue` 中就可以引入这些组件，并且传递关卡信息、运行结果等数据给组件，组装成一个完整的页面。
-
-
 
 ### 2、关卡设计
 
@@ -152,8 +129,6 @@ export default {
   type: "main",
 } as LevelType;
 ```
-
-
 
 ### 3、纯前端 SQL 执行
 
@@ -202,12 +177,9 @@ export const initDB = async (initSql?: string) => {
 export const runSQL = (db: Database, sql: string) => {
   return db.exec(sql);
 };
-
 ```
 
 在关卡加载时，会先执行关卡对应的初始化 SQL 语句完成建表和导入示例数据，然后用户就可以编写 SQL 查询表中的数据了。
-
-
 
 ### 4、判题机制
 
@@ -222,8 +194,6 @@ export const runSQL = (db: Database, sql: string) => {
 3. 判断两个结果表输出的数据是否一致
 
 这里作者用了个 trick 方式来对比数据，直接把两份结果集转为 JSON 格式，对比 JSON 字符串是否一致即可，而不是多重 for 循环。
-
-
 
 ## 目录结构
 
@@ -270,15 +240,11 @@ export const runSQL = (db: Database, sql: string) => {
 - tsconfig.json：TS 配置
 - vite.config.ts：打包工具配置
 
-
-
 ## 贡献指南
 
 欢迎各路好汉参与贡献，利人利己~
 
 目前有几种推荐的贡献方式：
-
-
 
 ### 1、贡献关卡
 
@@ -300,17 +266,11 @@ export const runSQL = (db: Database, sql: string) => {
 
 > 注意，本项目仅支持 SQLite 语法（基本上是通用的 SQL）！不要使用太花里胡哨的函数！
 
-
-
 ![自定义关卡](./doc/customLevel.png)
-
-
 
 ### 2、完善关卡
 
 比如修复关卡的错误、优化关卡的文案使其更易于理解或增加更多干货、调整关卡的难度等。
-
-
 
 ### 3、项目扩展
 
@@ -331,7 +291,6 @@ export const runSQL = (db: Database, sql: string) => {
 
 本项目 CDN 加速及安全防护由 Tencent EdgeOne 赞助
 
-[亚洲最佳CDN、边缘和安全解决方案 - Tencent EdgeOne](https://edgeone.ai/zh?from=github)
+[亚洲最佳 CDN、边缘和安全解决方案 - Tencent EdgeOne](https://edgeone.ai/zh?from=github)
 
 ![image](https://github.com/user-attachments/assets/eeb52237-4520-4a97-8f3d-6cb901e2106a)
-

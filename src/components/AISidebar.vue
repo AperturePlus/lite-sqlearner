@@ -522,10 +522,12 @@ onUnmounted(() => {
   font-size: 48px;
   margin-bottom: 16px;
   color: #faad14;
+  filter: drop-shadow(0 2px 8px rgba(250, 173, 20, 0.3));
 }
 
 .empty-chat p {
   margin-bottom: 8px;
+  font-size: 15px;
 }
 
 .empty-chat .hint {
@@ -619,12 +621,13 @@ onUnmounted(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  background: var(--card-bg);
 }
 
 .input-area {
   padding: 16px;
   border-top: 1px solid var(--border-color);
-  background: var(--bg-color);
+  background: var(--card-bg);
 }
 
 .send-btn {
@@ -650,7 +653,8 @@ onUnmounted(() => {
   background: rgba(148, 163, 184, 0.35);
 }
 
-:global([data-theme="dark"] .messages-container::-webkit-scrollbar-thumb:hover) {
+:global([data-theme="dark"]
+    .messages-container::-webkit-scrollbar-thumb:hover) {
   background: rgba(148, 163, 184, 0.5);
 }
 
@@ -660,5 +664,378 @@ onUnmounted(() => {
 
 :global([data-theme="dark"] .message-content::-webkit-scrollbar-thumb:hover) {
   background: rgba(148, 163, 184, 0.45);
+}
+
+/* 深色模式下的整体优化 */
+:global([data-theme="dark"] .empty-icon) {
+  color: #ffc53d;
+  filter: drop-shadow(0 2px 12px rgba(255, 197, 61, 0.5));
+}
+
+:global([data-theme="dark"] .empty-chat p) {
+  color: rgba(229, 231, 235, 0.85);
+}
+
+:global([data-theme="dark"] .empty-chat .hint) {
+  color: rgba(156, 163, 175, 0.8);
+}
+
+:global([data-theme="dark"] .message-assistant .message-content) {
+  background: rgba(31, 41, 55, 0.6);
+  border-color: rgba(71, 85, 105, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+:global([data-theme="dark"] .message-user .message-content) {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+:global([data-theme="dark"] .message-assistant .message-avatar) {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(71, 85, 105, 0.5);
+}
+
+:global([data-theme="dark"] .sql-actions) {
+  border-top-color: rgba(71, 85, 105, 0.4);
+}
+
+:global([data-theme="dark"] .quick-actions) {
+  background: rgba(15, 23, 42, 0.5);
+  border-top-color: rgba(71, 85, 105, 0.4);
+}
+
+:global([data-theme="dark"] .input-area) {
+  background: rgba(15, 23, 42, 0.5);
+  border-top-color: rgba(71, 85, 105, 0.4);
+}
+
+:global([data-theme="dark"] .input-hint) {
+  color: rgba(156, 163, 175, 0.7);
+}
+
+/* 深色模式下的触发按钮优化 */
+:global([data-theme="dark"] .ai-trigger-btn) {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+:global([data-theme="dark"] .ai-trigger-btn:hover) {
+  box-shadow: -4px 4px 16px rgba(124, 58, 237, 0.4);
+}
+
+/* 深色模式下的 Ant Design 组件优化 */
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-input),
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-input-affix-wrapper) {
+  background: rgba(17, 24, 39, 0.8) !important;
+  border-color: rgba(71, 85, 105, 0.6) !important;
+  color: var(--text-color) !important;
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-input:hover),
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-input:focus),
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-input-affix-wrapper:hover),
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-input-focused) {
+  border-color: rgba(96, 165, 250, 0.8) !important;
+  background: rgba(17, 24, 39, 0.95) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15) !important;
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-input::placeholder),
+:global([data-theme="dark"] .ai-sidebar-wrapper textarea::placeholder) {
+  color: rgba(156, 163, 175, 0.5) !important;
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn) {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-default) {
+  background: rgba(31, 41, 55, 0.8) !important;
+  border-color: rgba(71, 85, 105, 0.6) !important;
+  color: #e5e7eb !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-btn-default:hover:not(:disabled)) {
+  border-color: rgba(96, 165, 250, 0.8) !important;
+  background: rgba(31, 41, 55, 0.95) !important;
+  color: #93c5fd !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-btn-default:hover:not(:disabled)) {
+  border-color: rgba(96, 165, 250, 0.8) !important;
+  background: rgba(31, 41, 55, 0.95) !important;
+  color: #93c5fd !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-primary) {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  font-weight: 500;
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-btn-primary:hover:not(:disabled)) {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+  transform: translateY(-1px);
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-dangerous),
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-danger) {
+  background: rgba(220, 38, 38, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  color: #fca5a5 !important;
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.2);
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-btn-dangerous:hover:not(:disabled)),
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-btn-danger:hover:not(:disabled)) {
+  background: rgba(220, 38, 38, 0.35) !important;
+  border-color: rgba(239, 68, 68, 0.7) !important;
+  color: #fecaca !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* 深色模式下的 Drawer 阴影优化 */
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-drawer-content-wrapper) {
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-drawer-header) {
+  background: rgba(11, 18, 32, 0.95) !important;
+  backdrop-filter: blur(10px);
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-drawer-body) {
+  background: rgba(15, 23, 42, 0.95) !important;
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-drawer-title) {
+  color: var(--text-color) !important;
+}
+
+/* 深色模式下消息内容中的 Markdown 样式优化 */
+:global([data-theme="dark"] .message-content .markdown-body) {
+  background: transparent;
+}
+
+:global([data-theme="dark"] .message-content .markdown-body code) {
+  background: rgba(15, 23, 42, 0.6);
+  color: #93c5fd;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+:global([data-theme="dark"] .message-content .markdown-body pre) {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+}
+
+:global([data-theme="dark"] .message-content .markdown-body pre code) {
+  background: transparent;
+  border: none;
+}
+
+:global([data-theme="dark"]
+    .message-user
+    .message-content
+    .markdown-body
+    code) {
+  background: rgba(255, 255, 255, 0.2);
+  color: #e0f2fe;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+:global([data-theme="dark"] .message-user .message-content .markdown-body pre) {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 深色模式下按钮状态优化 */
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-default:disabled),
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn[disabled]) {
+  background: rgba(31, 41, 55, 0.3) !important;
+  border-color: rgba(71, 85, 105, 0.3) !important;
+  color: rgba(156, 163, 175, 0.4) !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-primary:disabled),
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-primary[disabled]) {
+  background: rgba(59, 130, 246, 0.25) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border: none !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* 快捷按钮区域额外优化 */
+:global([data-theme="dark"] .quick-actions .ant-btn) {
+  font-size: 13px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 6px;
+}
+
+:global([data-theme="dark"] .quick-actions .ant-btn-primary) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+}
+
+:global([data-theme="dark"]
+    .quick-actions
+    .ant-btn-primary:hover:not(:disabled)) {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+}
+
+:global([data-theme="dark"] .quick-actions .ant-btn-dangerous),
+:global([data-theme="dark"] .quick-actions .ant-btn-danger) {
+  background: rgba(220, 38, 38, 0.25) !important;
+  border-color: rgba(239, 68, 68, 0.6) !important;
+}
+
+:global([data-theme="dark"]
+    .quick-actions
+    .ant-btn-dangerous:hover:not(:disabled)),
+:global([data-theme="dark"]
+    .quick-actions
+    .ant-btn-danger:hover:not(:disabled)) {
+  background: rgba(220, 38, 38, 0.4) !important;
+  border-color: rgba(239, 68, 68, 0.8) !important;
+}
+
+/* 输入区域特别优化 */
+:global([data-theme="dark"] .input-area .ant-input),
+:global([data-theme="dark"] .input-area textarea.ant-input) {
+  background: rgba(17, 24, 39, 0.9) !important;
+  border: 1px solid rgba(71, 85, 105, 0.6) !important;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: none;
+}
+
+:global([data-theme="dark"] .input-area .send-btn) {
+  border-radius: 8px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* SQL 操作按钮优化 */
+:global([data-theme="dark"] .sql-actions .ant-btn-primary) {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: none !important;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
+:global([data-theme="dark"] .sql-actions .ant-btn-primary:hover) {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 消息加载动画优化 */
+:global([data-theme="dark"] .ai-sidebar-wrapper .ant-btn-loading-icon) {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* 按钮点击效果 */
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-btn:active:not(:disabled)) {
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 设置按钮特殊样式 */
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-drawer-header
+    .ant-btn-link) {
+  color: #93c5fd !important;
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    .ant-drawer-header
+    .ant-btn-link:hover) {
+  color: #60a5fa !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+}
+
+/* 确保文本域正确显示 */
+:global([data-theme="dark"] .ai-sidebar-wrapper textarea.ant-input) {
+  color: var(--text-color) !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    textarea.ant-input::-webkit-scrollbar) {
+  width: 6px;
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    textarea.ant-input::-webkit-scrollbar-thumb) {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 3px;
+}
+
+:global([data-theme="dark"]
+    .ai-sidebar-wrapper
+    textarea.ant-input::-webkit-scrollbar-thumb:hover) {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* 深色模式下未配置状态优化 */
+:global([data-theme="dark"] .no-config-content h3) {
+  color: #e5e7eb !important;
+}
+
+:global([data-theme="dark"] .no-config-content p) {
+  color: rgba(156, 163, 175, 0.9) !important;
+}
+
+:global([data-theme="dark"] .no-config-icon) {
+  color: #93c5fd !important;
+  filter: drop-shadow(0 4px 12px rgba(147, 197, 253, 0.3));
+}
+
+:global([data-theme="dark"] .no-config-content .ant-btn-primary) {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  font-size: 16px;
+  height: 48px;
+  padding: 0 32px;
+}
+
+:global([data-theme="dark"] .no-config-content .ant-btn-primary:hover) {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+  transform: translateY(-2px);
 }
 </style>

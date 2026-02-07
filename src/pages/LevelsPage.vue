@@ -190,8 +190,8 @@ onMounted(() => {
   font-size: clamp(30px, 4vw, 42px);
   letter-spacing: 0.8px;
   color: var(--text-color);
-  font-family:
-    "Trebuchet MS", "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: "Trebuchet MS", "Avenir Next", "PingFang SC", "Microsoft YaHei",
+    sans-serif;
 }
 
 .page-description {
@@ -229,8 +229,7 @@ onMounted(() => {
   right: 16px;
   bottom: 10px;
   height: 220px;
-  background:
-    radial-gradient(
+  background: radial-gradient(
       circle at 26% 74%,
       rgba(59, 130, 246, 0.3),
       transparent 62%
@@ -272,10 +271,22 @@ onMounted(() => {
   overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid rgba(59, 130, 246, 0.22);
-  background:
-    radial-gradient(circle at 18% 84%, rgba(37, 99, 235, 0.2), transparent 52%),
-    radial-gradient(circle at 80% 14%, rgba(14, 165, 233, 0.16), transparent 42%),
-    linear-gradient(180deg, rgba(191, 219, 254, 0.34) 0%, rgba(255, 255, 255, 0.08) 36%, rgba(255, 255, 255, 0) 100%);
+  background: radial-gradient(
+      circle at 18% 84%,
+      rgba(37, 99, 235, 0.2),
+      transparent 52%
+    ),
+    radial-gradient(
+      circle at 80% 14%,
+      rgba(14, 165, 233, 0.16),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(191, 219, 254, 0.34) 0%,
+      rgba(255, 255, 255, 0.08) 36%,
+      rgba(255, 255, 255, 0) 100%
+    );
   position: relative;
   z-index: 2;
 }
@@ -338,10 +349,7 @@ onMounted(() => {
   display: grid;
   gap: 5px;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   z-index: 2;
 }
 
@@ -404,8 +412,7 @@ onMounted(() => {
 }
 
 .branch-panel {
-  background:
-    linear-gradient(
+  background: linear-gradient(
       180deg,
       rgba(251, 191, 36, 0.14) 0%,
       rgba(251, 191, 36, 0.02) 38%,
@@ -458,10 +465,7 @@ onMounted(() => {
   row-gap: 2px;
   align-items: center;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .branch-node:hover {
@@ -553,17 +557,12 @@ onMounted(() => {
 }
 
 :global([data-theme="dark"] .mountain-panel::after) {
-  background:
-    radial-gradient(
+  background: radial-gradient(
       circle at 26% 74%,
       rgba(59, 130, 246, 0.26),
       transparent 62%
     ),
-    radial-gradient(
-      circle at 78% 32%,
-      rgba(14, 165, 233, 0.2),
-      transparent 60%
-    );
+    radial-gradient(circle at 78% 32%, rgba(14, 165, 233, 0.2), transparent 60%);
   opacity: 0.34;
 }
 
@@ -576,9 +575,16 @@ onMounted(() => {
 
 :global([data-theme="dark"] .mountain-map-viewport) {
   border-color: rgba(96, 165, 250, 0.36);
-  background:
-    radial-gradient(circle at 18% 84%, rgba(59, 130, 246, 0.34), transparent 54%),
-    radial-gradient(circle at 80% 16%, rgba(14, 165, 233, 0.24), transparent 40%),
+  background: radial-gradient(
+      circle at 18% 84%,
+      rgba(59, 130, 246, 0.34),
+      transparent 54%
+    ),
+    radial-gradient(
+      circle at 80% 16%,
+      rgba(14, 165, 233, 0.24),
+      transparent 40%
+    ),
     linear-gradient(180deg, rgba(30, 41, 59, 0.86), rgba(15, 23, 42, 0.88));
 }
 
@@ -586,7 +592,8 @@ onMounted(() => {
   background: rgba(96, 165, 250, 0.58);
 }
 
-:global([data-theme="dark"] .mountain-map-viewport::-webkit-scrollbar-thumb:hover) {
+:global([data-theme="dark"]
+    .mountain-map-viewport::-webkit-scrollbar-thumb:hover) {
   background: rgba(96, 165, 250, 0.75);
 }
 
@@ -639,8 +646,7 @@ onMounted(() => {
 }
 
 :global([data-theme="dark"] .branch-panel) {
-  background:
-    linear-gradient(
+  background: linear-gradient(
       180deg,
       rgba(249, 115, 22, 0.18) 0%,
       rgba(249, 115, 22, 0.04) 38%,
