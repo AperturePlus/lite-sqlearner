@@ -494,6 +494,24 @@ onUnmounted(() => {
   padding: 16px;
 }
 
+.messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 .empty-chat {
   text-align: center;
   padding: 60px 20px;
@@ -549,6 +567,23 @@ onUnmounted(() => {
   border-radius: 12px;
   word-wrap: break-word;
   overflow-x: auto;
+}
+
+.message-content::-webkit-scrollbar {
+  height: 4px;
+}
+
+.message-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.message-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+
+.message-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .message-assistant .message-content {
@@ -608,5 +643,22 @@ onUnmounted(() => {
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px dashed var(--border-color);
+}
+
+/* 深色模式下滚动条优化 */
+:global([data-theme="dark"] .messages-container::-webkit-scrollbar-thumb) {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+:global([data-theme="dark"] .messages-container::-webkit-scrollbar-thumb:hover) {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+:global([data-theme="dark"] .message-content::-webkit-scrollbar-thumb) {
+  background: rgba(148, 163, 184, 0.3);
+}
+
+:global([data-theme="dark"] .message-content::-webkit-scrollbar-thumb:hover) {
+  background: rgba(148, 163, 184, 0.45);
 }
 </style>

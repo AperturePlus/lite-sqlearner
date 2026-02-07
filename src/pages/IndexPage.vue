@@ -9,60 +9,62 @@
         </a-button>
       </div>
 
-      <div v-if="!isSidebarCollapsed" class="sidebar-content">
-        <div class="sidebar-group">
-          <div class="group-title">主线关卡</div>
+      <transition name="sidebar-fade" mode="out-in">
+        <div v-if="!isSidebarCollapsed" key="full" class="sidebar-content">
+          <div class="sidebar-group">
+            <div class="group-title">主线关卡</div>
+            <button
+              v-for="(levelItem, index) in mainLevels"
+              :key="levelItem.key"
+              type="button"
+              class="level-item"
+              :class="{ active: isCurrentLevel(levelItem.key) }"
+              @click="goToLevel(levelItem.key)"
+            >
+              <span class="level-index">{{ index + 1 }}</span>
+              <span class="level-name">{{ levelItem.title }}</span>
+            </button>
+          </div>
+
+          <div class="sidebar-group">
+            <div class="group-title">自定义关卡</div>
+            <button
+              v-for="(levelItem, index) in customLevels"
+              :key="levelItem.key"
+              type="button"
+              class="level-item"
+              :class="{ active: isCurrentLevel(levelItem.key) }"
+              @click="goToLevel(levelItem.key)"
+            >
+              <span class="level-index">C{{ index + 1 }}</span>
+              <span class="level-name">{{ levelItem.title }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div v-else key="mini" class="sidebar-mini">
           <button
             v-for="(levelItem, index) in mainLevels"
-            :key="levelItem.key"
+            :key="`mini-main-${levelItem.key}`"
             type="button"
-            class="level-item"
+            class="mini-item"
             :class="{ active: isCurrentLevel(levelItem.key) }"
             @click="goToLevel(levelItem.key)"
           >
-            <span class="level-index">{{ index + 1 }}</span>
-            <span class="level-name">{{ levelItem.title }}</span>
+            {{ index + 1 }}
           </button>
-        </div>
-
-        <div class="sidebar-group">
-          <div class="group-title">自定义关卡</div>
           <button
             v-for="(levelItem, index) in customLevels"
-            :key="levelItem.key"
+            :key="`mini-custom-${levelItem.key}`"
             type="button"
-            class="level-item"
+            class="mini-item"
             :class="{ active: isCurrentLevel(levelItem.key) }"
             @click="goToLevel(levelItem.key)"
           >
-            <span class="level-index">C{{ index + 1 }}</span>
-            <span class="level-name">{{ levelItem.title }}</span>
+            C{{ index + 1 }}
           </button>
         </div>
-      </div>
-
-      <div v-else class="sidebar-mini">
-        <button
-          v-for="(levelItem, index) in mainLevels"
-          :key="`mini-main-${levelItem.key}`"
-          type="button"
-          class="mini-item"
-          :class="{ active: isCurrentLevel(levelItem.key) }"
-          @click="goToLevel(levelItem.key)"
-        >
-          {{ index + 1 }}
-        </button>
-        <button
-          v-for="(levelItem, index) in customLevels"
-          :key="`mini-custom-${levelItem.key}`"
-          type="button"
-          class="mini-item"
-          :class="{ active: isCurrentLevel(levelItem.key) }"
-          @click="goToLevel(levelItem.key)"
-        >
-          C{{ index + 1 }}
-        </button>
-      </div>
+      </transition>
     </aside>
 
     <section class="workspace">
@@ -270,6 +272,7 @@ onUnmounted(() => {
   top: 24px;
   height: calc(100vh - 48px);
   max-height: calc(100vh - 48px);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .level-sidebar.collapsed {
@@ -283,15 +286,24 @@ onUnmounted(() => {
   justify-content: space-between;
   padding: 10px 12px;
   border-bottom: 1px solid var(--border-color);
+  min-height: 48px;
 }
 
 .sidebar-title {
   color: var(--text-color);
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .toggle-btn {
   color: var(--text-color);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.toggle-btn:hover {
+  transform: scale(1.1);
 }
 
 .sidebar-content {
@@ -300,6 +312,24 @@ onUnmounted(() => {
   min-height: 0;
   overscroll-behavior: contain;
   padding: 8px;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-group + .sidebar-group {
@@ -362,6 +392,24 @@ onUnmounted(() => {
   padding: 8px;
 }
 
+.sidebar-mini::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-mini::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.sidebar-mini::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+.sidebar-mini::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 .mini-item {
   height: 30px;
   border: 1px solid var(--border-color);
@@ -390,6 +438,40 @@ onUnmounted(() => {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 侧边栏动画 */
+.sidebar-fade-enter-active,
+.sidebar-fade-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.95) translateX(-10px);
+}
+
+.sidebar-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateX(10px);
+}
+
+.sidebar-fade-enter-to,
+.sidebar-fade-leave-from {
+  opacity: 1;
+  transform: scale(1) translateX(0);
+}
+
+/* 深色模式下侧边栏滚动条优化 */
+:global([data-theme="dark"] .sidebar-content::-webkit-scrollbar-thumb),
+:global([data-theme="dark"] .sidebar-mini::-webkit-scrollbar-thumb) {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+:global([data-theme="dark"] .sidebar-content::-webkit-scrollbar-thumb:hover),
+:global([data-theme="dark"] .sidebar-mini::-webkit-scrollbar-thumb:hover) {
+  background: rgba(148, 163, 184, 0.5);
 }
 
 .workspace-header {

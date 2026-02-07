@@ -210,3 +210,57 @@ a {
 [data-theme="dark"] .ant-drawer-header {
     border-bottom: 1px solid var(--border-color) !important;
 }
+
+/* ========== 滚动条样式优化 ========== */
+
+/* 浅色模式滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Firefox 滚动条样式 */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+/* 深色模式滚动条 */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.45);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:active {
+    background: rgba(148, 163, 184, 0.6);
+}
+
+[data-theme="dark"] * {
+    scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}

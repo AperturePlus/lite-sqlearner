@@ -278,6 +278,24 @@ watch(
   background: var(--bg-secondary);
 }
 
+.messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 .message {
   margin-bottom: 16px;
 }
@@ -354,5 +372,14 @@ watch(
   content: "";
   display: table;
   clear: both;
+}
+
+/* 深色模式下滚动条优化 */
+:global([data-theme="dark"] .messages-container::-webkit-scrollbar-thumb) {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+:global([data-theme="dark"] .messages-container::-webkit-scrollbar-thumb:hover) {
+  background: rgba(148, 163, 184, 0.5);
 }
 </style>

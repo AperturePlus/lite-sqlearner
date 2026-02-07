@@ -98,4 +98,30 @@ const toNextLevel = () => {
   min-height: 600px;
   overflow-y: auto;
 }
+
+#questionBoard #questionCard::-webkit-scrollbar {
+  width: 6px;
+}
+
+#questionBoard #questionCard::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+#questionBoard #questionCard::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+#questionBoard #questionCard::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+:global([data-theme="dark"] #questionBoard #questionCard::-webkit-scrollbar-thumb) {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+:global([data-theme="dark"] #questionBoard #questionCard::-webkit-scrollbar-thumb:hover) {
+  background: rgba(148, 163, 184, 0.5);
+}
 </style>
