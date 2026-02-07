@@ -56,22 +56,38 @@ export const checkResult = (
   result: QueryExecResult[],
   answerResult: QueryExecResult[]
 ) => {
-  if (!result?.[0] || !answerResult?.[0]) {
+  if (!result?.length || !answerResult?.length) {
     return RESULT_STATUS_ENUM.ERROR;
   }
 
-  const normResult = normalizeResult(result[0]);
-  const normAnswer = normalizeResult(answerResult[0]);
-
-  // 列名需要一致（已归一化排序 + 小写）
-  if (
-    JSON.stringify(normResult.columns) !== JSON.stringify(normAnswer.columns)
-  ) {
+  if (result.length !== answerResult.length) {
     return RESULT_STATUS_ENUM.ERROR;
   }
-  // 数据需要一致（已归一化排序）
-  if (JSON.stringify(normResult.values) === JSON.stringify(normAnswer.values)) {
-    return RESULT_STATUS_ENUM.SUCCEED;
+
+  for (let i = 0; i < result.length; i++) {
+    const currentResult = result[i];
+    const currentAnswer = answerResult[i];
+    if (!currentResult || !currentAnswer) {
+      return RESULT_STATUS_ENUM.ERROR;
+    }
+
+    const normResult = normalizeResult(currentResult);
+    const normAnswer = normalizeResult(currentAnswer);
+
+    // 列名需要一致（已归一化排序 + 小写）
+    if (
+      JSON.stringify(normResult.columns) !== JSON.stringify(normAnswer.columns)
+    ) {
+      return RESULT_STATUS_ENUM.ERROR;
+    }
+
+    // 数据需要一致（已归一化排序）
+    if (
+      JSON.stringify(normResult.values) !== JSON.stringify(normAnswer.values)
+    ) {
+      return RESULT_STATUS_ENUM.ERROR;
+    }
   }
-  return RESULT_STATUS_ENUM.ERROR;
+
+  return RESULT_STATUS_ENUM.SUCCEED;
 };

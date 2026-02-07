@@ -20,13 +20,13 @@ import {
   ref,
   toRaw,
   toRefs,
-  watchEffect,
+  watch,
 } from "vue";
 import * as monaco from "monaco-editor";
 import { format } from "sql-formatter";
 import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import { initDB, runSQL } from "../core/sqlExecutor";
-import { QueryExecResult } from "sql.js";
+import { Database, QueryExecResult } from "sql.js";
 // eslint-disable-next-line no-undef
 import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import { message } from "ant-design-vue";
@@ -55,23 +55,49 @@ const props = withDefaults(defineProps<SqlEditorProps>(), {});
 const { level, onSubmit } = toRefs(props);
 const inputEditor = ref<IStandaloneCodeEditor>();
 const editorRef = ref<HTMLElement>();
-const db = ref();
+const db = ref<Database | null>(null);
 const globalStore = useGlobalStore();
 const editorTheme = computed(() =>
   globalStore.theme === "dark" ? "vs-dark" : "vs"
 );
 
-watchEffect(async () => {
-  // 初始化 / 更新默认 SQL
-  if (inputEditor.value) {
+const closeDB = () => {
+  if (db.value) {
+    db.value.close();
+    db.value = null;
+  }
+};
+
+let initVersion = 0;
+
+watch(
+  [() => level.value.key, inputEditor],
+  async () => {
+    if (!inputEditor.value) {
+      return;
+    }
+
+    // 初始化 / 更新默认 SQL
     toRaw(inputEditor.value).setValue(
       "-- 请在此处输入 SQL\n" + level.value.defaultSQL
     );
-  }
-  // 初始化 / 更新 DB
-  db.value = await initDB(level.value.initSQL);
-  doSubmit();
-});
+
+    // 初始化 / 更新 DB
+    closeDB();
+    const currentVersion = ++initVersion;
+    const nextDB = await initDB(level.value.initSQL);
+
+    // 异步初始化竞态保护：仅保留最新一次初始化结果
+    if (currentVersion !== initVersion) {
+      nextDB.close();
+      return;
+    }
+
+    db.value = nextDB;
+    await doSubmit();
+  },
+  { immediate: true }
+);
 
 /**
  * SQL 格式化
@@ -92,8 +118,9 @@ const doFormat = () => {
 const doReset = async () => {
   if (inputEditor.value) {
     toRaw(inputEditor.value).setValue(level.value.defaultSQL);
+    closeDB();
     db.value = await initDB(level.value.initSQL);
-    doSubmit();
+    await doSubmit();
   }
 };
 
@@ -122,23 +149,26 @@ const setSQL = (sql: string) => {
  * 答案 SQL 在独立的 DB 实例上运行，防止用户通过 INSERT/UPDATE/DELETE/DDL 污染数据影响判题
  */
 const doSubmit = async () => {
-  if (!inputEditor.value) {
+  if (!inputEditor.value || !db.value) {
     return;
   }
   const inputStr = toRaw(inputEditor.value).getValue();
-  console.log("inputStr", inputStr);
+  let answerDB: Database | null = null;
   try {
     const result = runSQL(db.value, inputStr);
     // 答案在全新的干净 DB 上执行，隔离用户操作
-    const answerDB = await initDB(level.value.initSQL);
+    answerDB = await initDB(level.value.initSQL);
     const answerResult = runSQL(answerDB, level.value.answer);
-    answerDB.close();
     // 向外层传递结果
     onSubmit?.value(inputStr, result, answerResult);
   } catch (error: any) {
     message.error("语句错误，" + error.message);
     // 向外层传递结果
     onSubmit?.value(inputStr, [], [], error.message);
+  } finally {
+    if (answerDB) {
+      answerDB.close();
+    }
   }
 };
 
@@ -167,9 +197,9 @@ onMounted(async () => {
   }
 });
 
-watchEffect(() => {
+watch(editorTheme, (theme) => {
   if (inputEditor.value) {
-    monaco.editor.setTheme(editorTheme.value);
+    monaco.editor.setTheme(theme);
   }
 });
 
@@ -177,6 +207,7 @@ watchEffect(() => {
  * 释放资源
  */
 onUnmounted(() => {
+  closeDB();
   if (inputEditor.value) {
     toRaw(inputEditor.value).dispose();
   }

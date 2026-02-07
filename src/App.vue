@@ -39,12 +39,12 @@
     <a-back-top :style="{ right: '60px' }" />
 
     <!-- AI 助手侧边栏 -->
-    <AISidebar />
+    <AISidebar v-if="showAISidebar" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import AISidebar from "./components/AISidebar.vue";
@@ -52,7 +52,25 @@ import { useGlobalStore } from "./core/globalStore";
 
 const route = useRoute();
 const router = useRouter();
-const selectedKeys = computed(() => [route.path]);
+const selectedKeys = computed(() => {
+  if (route.path === "/" || route.path.startsWith("/learn")) {
+    return ["/learn"];
+  }
+  if (route.path.startsWith("/levels")) {
+    return ["/levels"];
+  }
+  if (route.path.startsWith("/playground")) {
+    return ["/playground"];
+  }
+  return [];
+});
+const showAISidebar = computed(() => {
+  return (
+    route.path === "/" ||
+    route.path.startsWith("/learn") ||
+    route.path.startsWith("/playground")
+  );
+});
 const globalStore = useGlobalStore();
 const isDark = computed(() => globalStore.theme === "dark");
 
@@ -115,9 +133,9 @@ watch(
   padding: 12px;
   text-align: center;
   background: var(--footer-bg);
+}
 
-  p {
-    margin-bottom: 4px;
-  }
+.footer p {
+  margin-bottom: 4px;
 }
 </style>
