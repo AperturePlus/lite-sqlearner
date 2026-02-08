@@ -14,17 +14,10 @@ import {
   toRaw,
   watch,
 } from "vue";
-import * as monaco from "monaco-editor";
-import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
-// eslint-disable-next-line no-undef
-import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
+import type { editor } from "monaco-editor";
 import { useGlobalStore } from "../core/globalStore";
 
-(self as any).MonacoEnvironment = {
-  getWorker(_: any, label: any) {
-    return new EditorWorker();
-  },
-};
+type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
 // @ts-ignore
 interface Props {
@@ -40,14 +33,25 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const inputEditor = ref<IStandaloneCodeEditor>();
 const editorRef = ref<HTMLElement>();
+const monacoRef = ref<any>(null);
 const globalStore = useGlobalStore();
 const editorTheme = computed(() =>
   globalStore.theme === "dark" ? "vs-dark" : "vs"
 );
 
 onMounted(async () => {
-  // 初始化代码编辑器
   if (editorRef.value) {
+    const monaco = await import("monaco-editor/esm/vs/editor/editor.api");
+    const { default: EditorWorker } = await import(
+      "monaco-editor/esm/vs/editor/editor.worker?worker"
+    );
+    await import("monaco-editor/esm/vs/basic-languages/sql/sql");
+    (self as any).MonacoEnvironment = {
+      getWorker() {
+        return new EditorWorker();
+      },
+    };
+    monacoRef.value = monaco;
     inputEditor.value = monaco.editor.create(editorRef.value, {
       value: props.initValue,
       language: "sql",
@@ -73,8 +77,8 @@ watch(
 );
 
 watch(editorTheme, (theme) => {
-  if (inputEditor.value) {
-    monaco.editor.setTheme(theme);
+  if (inputEditor.value && monacoRef.value) {
+    monacoRef.value.editor.setTheme(theme);
   }
 });
 

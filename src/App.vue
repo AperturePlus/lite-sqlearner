@@ -44,11 +44,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, defineAsyncComponent, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import AISidebar from "./components/AISidebar.vue";
 import { useGlobalStore } from "./core/globalStore";
+
+const AISidebar = defineAsyncComponent(() => import("./components/AISidebar.vue"));
 
 const route = useRoute();
 const router = useRouter();

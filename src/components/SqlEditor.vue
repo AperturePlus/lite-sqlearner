@@ -22,21 +22,14 @@ import {
   toRefs,
   watch,
 } from "vue";
-import * as monaco from "monaco-editor";
+import type { editor } from "monaco-editor";
 import { format } from "sql-formatter";
-import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import { initDB, runSQL } from "../core/sqlExecutor";
 import { Database, QueryExecResult } from "sql.js";
-// eslint-disable-next-line no-undef
-import IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 import { message } from "ant-design-vue";
 import { useGlobalStore } from "../core/globalStore";
 
-(self as any).MonacoEnvironment = {
-  getWorker(_: any, label: any) {
-    return new EditorWorker();
-  },
-};
+type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
 // @ts-ignore
 interface SqlEditorProps {
@@ -55,6 +48,7 @@ const props = withDefaults(defineProps<SqlEditorProps>(), {});
 const { level, onSubmit } = toRefs(props);
 const inputEditor = ref<IStandaloneCodeEditor>();
 const editorRef = ref<HTMLElement>();
+const monacoRef = ref<any>(null);
 const db = ref<Database | null>(null);
 const globalStore = useGlobalStore();
 const editorTheme = computed(() =>
@@ -173,8 +167,18 @@ const doSubmit = async () => {
 };
 
 onMounted(async () => {
-  // 初始化代码编辑器
   if (editorRef.value) {
+    const monaco = await import("monaco-editor/esm/vs/editor/editor.api");
+    const { default: EditorWorker } = await import(
+      "monaco-editor/esm/vs/editor/editor.worker?worker"
+    );
+    await import("monaco-editor/esm/vs/basic-languages/sql/sql");
+    (self as any).MonacoEnvironment = {
+      getWorker() {
+        return new EditorWorker();
+      },
+    };
+    monacoRef.value = monaco;
     const initValue = "";
     inputEditor.value = monaco.editor.create(editorRef.value, {
       value: initValue,
@@ -198,8 +202,8 @@ onMounted(async () => {
 });
 
 watch(editorTheme, (theme) => {
-  if (inputEditor.value) {
-    monaco.editor.setTheme(theme);
+  if (inputEditor.value && monacoRef.value) {
+    monacoRef.value.editor.setTheme(theme);
   }
 });
 

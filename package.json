@@ -16,6 +16,9 @@
     "directories": {
       "output": "release"
     },
+    "asar": true,
+    "asarUnpack": ["**/*.wasm"],
+    "compression": "maximum",
     "files": [
       "dist/**/*",
       "dist-electron/**/*",
