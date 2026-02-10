@@ -186,7 +186,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, watch, onMounted, onUnmounted } from "vue";
+import {
+  ref,
+  computed,
+  nextTick,
+  watch,
+  onMounted,
+  onUnmounted,
+  defineAsyncComponent,
+} from "vue";
 import { message } from "ant-design-vue";
 import {
   RobotOutlined,
@@ -197,8 +205,9 @@ import {
 import { useGlobalStore } from "../core/globalStore";
 import { createAIClient } from "../core/aiClient";
 import { AIMessage } from "../core/ai.d";
-import MdViewer from "./MdViewer.vue";
 import AIConfigModal from "./AIConfigModal.vue";
+
+const MdViewer = defineAsyncComponent(() => import("./MdViewer.vue"));
 
 const globalStore = useGlobalStore();
 

@@ -129,18 +129,33 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  watch,
+} from "vue";
 import { useRouter } from "vue-router";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import { QueryExecResult } from "sql.js";
-import SqlEditor from "../components/SqlEditor.vue";
-import QuestionBoard from "../components/QuestionBoard.vue";
-import SqlResult from "../components/SqlResult.vue";
-import CodeEditor from "../components/CodeEditor.vue";
 import { allLevels, getLevelByKey } from "../levels";
 import mainLevels from "../levels/mainLevels";
 import customLevels from "../levels/customLevels";
 import { checkResult } from "../core/result";
+
+const SqlEditor = defineAsyncComponent(() => import("../components/SqlEditor.vue"));
+const QuestionBoard = defineAsyncComponent(
+  () => import("../components/QuestionBoard.vue")
+);
+const SqlResult = defineAsyncComponent(() => import("../components/SqlResult.vue"));
+const CodeEditor = defineAsyncComponent(() => import("../components/CodeEditor.vue"));
+
+interface SqlEditorExpose {
+  getCurrentSQL: () => string;
+  setSQL: (sql: string) => void;
+}
 
 interface IndexPageProps {
   levelKey?: string;
@@ -162,7 +177,7 @@ const errorMsgRef = ref<string>();
 const resultStatus = ref<number>(-1);
 const defaultActiveKeys = ["result"];
 const activeKeys = ref([...defaultActiveKeys]);
-const sqlEditorRef = ref<InstanceType<typeof SqlEditor>>();
+const sqlEditorRef = ref<SqlEditorExpose | null>(null);
 
 const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;

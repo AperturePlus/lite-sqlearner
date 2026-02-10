@@ -2,6 +2,8 @@
   "name": "sql-mother",
   "private": true,
   "version": "0.0.1",
+  "description": "Interactive SQL training playground desktop application",
+  "author": "SQL Training Ground Team",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
@@ -19,11 +21,31 @@
     "asar": true,
     "asarUnpack": ["**/*.wasm"],
     "compression": "maximum",
+    "npmRebuild": false,
+    "buildDependenciesFromSource": false,
+    "removePackageScripts": true,
+    "electronLanguages": ["en-US", "zh-CN"],
     "files": [
       "dist/**/*",
       "dist-electron/**/*",
-      "package.json"
-    ]
+      "package.json",
+      "!**/*.map",
+      "!**/CHANGELOG*",
+      "!**/{test,tests,__tests__,example,examples}/**",
+      "!**/{README,README.*,readme,readme.*}"
+    ],
+    "win": {
+      "target": ["nsis"],
+      "artifactName": "${productName}-${version}-Setup-${arch}.${ext}"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Development"
+    }
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.73.0",

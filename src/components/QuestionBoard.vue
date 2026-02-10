@@ -32,12 +32,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toRefs, watch } from "vue";
+import { computed, defineAsyncComponent, toRefs, watch } from "vue";
 import mainLevels from "../levels/mainLevels";
 import { getCurrentLevelNum, getNextLevel, getPrevLevel } from "../levels";
 import { useRouter } from "vue-router";
 import { RESULT_STATUS_ENUM } from "../core/result";
-import MdViewer from "./MdViewer.vue";
+const MdViewer = defineAsyncComponent(() => import("./MdViewer.vue"));
 
 interface Props {
   level: LevelType;
