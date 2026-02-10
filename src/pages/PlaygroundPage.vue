@@ -33,8 +33,12 @@ import { defineAsyncComponent, ref } from "vue";
 import { QueryExecResult } from "sql.js";
 import { allLevels } from "../levels";
 
-const SqlEditor = defineAsyncComponent(() => import("../components/SqlEditor.vue"));
-const SqlResult = defineAsyncComponent(() => import("../components/SqlResult.vue"));
+const SqlEditor = defineAsyncComponent(
+  () => import("../components/SqlEditor.vue")
+);
+const SqlResult = defineAsyncComponent(
+  () => import("../components/SqlResult.vue")
+);
 
 const result = ref<QueryExecResult[]>([]);
 const sqlHistoryList = ref<any>([]);

@@ -5,9 +5,7 @@ import sharp from "sharp";
 import iconGenModule from "icon-gen";
 
 const iconGen =
-  typeof iconGenModule === "function"
-    ? iconGenModule
-    : iconGenModule.default;
+  typeof iconGenModule === "function" ? iconGenModule : iconGenModule.default;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

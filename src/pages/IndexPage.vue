@@ -145,12 +145,18 @@ import mainLevels from "../levels/mainLevels";
 import customLevels from "../levels/customLevels";
 import { checkResult } from "../core/result";
 
-const SqlEditor = defineAsyncComponent(() => import("../components/SqlEditor.vue"));
+const SqlEditor = defineAsyncComponent(
+  () => import("../components/SqlEditor.vue")
+);
 const QuestionBoard = defineAsyncComponent(
   () => import("../components/QuestionBoard.vue")
 );
-const SqlResult = defineAsyncComponent(() => import("../components/SqlResult.vue"));
-const CodeEditor = defineAsyncComponent(() => import("../components/CodeEditor.vue"));
+const SqlResult = defineAsyncComponent(
+  () => import("../components/SqlResult.vue")
+);
+const CodeEditor = defineAsyncComponent(
+  () => import("../components/CodeEditor.vue")
+);
 
 interface SqlEditorExpose {
   getCurrentSQL: () => string;

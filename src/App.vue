@@ -49,7 +49,9 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useGlobalStore } from "./core/globalStore";
 
-const AISidebar = defineAsyncComponent(() => import("./components/AISidebar.vue"));
+const AISidebar = defineAsyncComponent(
+  () => import("./components/AISidebar.vue")
+);
 
 const route = useRoute();
 const router = useRouter();

@@ -48,7 +48,11 @@ const createWindow = () => {
     if (url.startsWith("file://")) {
       return;
     }
-    if (isDev && process.env.VITE_DEV_SERVER_URL && url.startsWith(process.env.VITE_DEV_SERVER_URL)) {
+    if (
+      isDev &&
+      process.env.VITE_DEV_SERVER_URL &&
+      url.startsWith(process.env.VITE_DEV_SERVER_URL)
+    ) {
       return;
     }
     event.preventDefault();

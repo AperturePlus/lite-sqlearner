@@ -12,7 +12,9 @@ export const ensureMonacoSqlLanguage = async (monaco: MonacoApi) => {
   }
 
   preparingSqlLanguage = (async () => {
-    const sqlLang = await import("monaco-editor/esm/vs/basic-languages/sql/sql");
+    const sqlLang = await import(
+      "monaco-editor/esm/vs/basic-languages/sql/sql"
+    );
     const hasSqlLanguage = monaco.languages
       .getLanguages()
       .some((language) => language.id === "sql");
