@@ -9,22 +9,29 @@
     "dev": "vite",
     "dev:electron": "concurrently -k \"vite\" \"tsc -p tsconfig.electron.json -w\" \"wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
     "build": "vite build && tsc -p tsconfig.electron.json",
-    "electron:pack": "yarn build && electron-builder",
+    "icon:generate": "node scripts/generate-icons.mjs",
+    "electron:pack": "yarn icon:generate && yarn build && electron-builder",
     "preview": "vite preview"
   },
   "build": {
     "appId": "com.sql.training.ground",
     "productName": "SQL Training Ground",
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "build"
     },
     "asar": true,
-    "asarUnpack": ["**/*.wasm"],
+    "asarUnpack": [
+      "**/*.wasm"
+    ],
     "compression": "maximum",
     "npmRebuild": false,
     "buildDependenciesFromSource": false,
     "removePackageScripts": true,
-    "electronLanguages": ["en-US", "zh-CN"],
+    "electronLanguages": [
+      "en-US",
+      "zh-CN"
+    ],
     "files": [
       "dist/**/*",
       "dist-electron/**/*",
@@ -35,16 +42,37 @@
       "!**/{README,README.*,readme,readme.*}"
     ],
     "win": {
-      "target": ["nsis"],
-      "artifactName": "${productName}-${version}-Setup-${arch}.${ext}"
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "${productName}-${version}-Setup-${arch}.${ext}",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "allowElevation": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico"
     },
     "mac": {
-      "target": ["dmg"],
-      "category": "public.app-category.developer-tools"
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.developer-tools",
+      "icon": "build/icon.icns"
     },
     "linux": {
-      "target": ["AppImage", "deb"],
-      "category": "Development"
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development",
+      "icon": "build/icons"
     }
   },
   "dependencies": {
@@ -82,7 +110,9 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^8.7.1",
+    "icon-gen": "^5.0.0",
     "prettier": "^2.7.1",
+    "sharp": "^0.34.5",
     "typescript": "^4.6.4",
     "vite": "^3.0.7",
     "vue-tsc": "^0.39.5",

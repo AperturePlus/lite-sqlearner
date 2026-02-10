@@ -16,6 +16,7 @@ import {
 } from "vue";
 import type { editor } from "monaco-editor";
 import { useGlobalStore } from "../core/globalStore";
+import { ensureMonacoSqlLanguage } from "../core/monacoSql";
 
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
@@ -45,12 +46,13 @@ onMounted(async () => {
     const { default: EditorWorker } = await import(
       "monaco-editor/esm/vs/editor/editor.worker?worker"
     );
-    await import("monaco-editor/esm/vs/basic-languages/sql/sql");
     (self as any).MonacoEnvironment = {
       getWorker() {
         return new EditorWorker();
       },
     };
+    // 手动注册 SQL 语言（按需导入 editor.api 不会自动注册语言）
+    await ensureMonacoSqlLanguage(monaco);
     monacoRef.value = monaco;
     inputEditor.value = monaco.editor.create(editorRef.value, {
       value: props.initValue,

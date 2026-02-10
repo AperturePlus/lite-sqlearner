@@ -28,6 +28,7 @@ import { initDB, runSQL } from "../core/sqlExecutor";
 import { Database, QueryExecResult } from "sql.js";
 import { message } from "ant-design-vue";
 import { useGlobalStore } from "../core/globalStore";
+import { ensureMonacoSqlLanguage } from "../core/monacoSql";
 
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
@@ -172,12 +173,12 @@ onMounted(async () => {
     const { default: EditorWorker } = await import(
       "monaco-editor/esm/vs/editor/editor.worker?worker"
     );
-    await import("monaco-editor/esm/vs/basic-languages/sql/sql");
     (self as any).MonacoEnvironment = {
       getWorker() {
         return new EditorWorker();
       },
     };
+    await ensureMonacoSqlLanguage(monaco);
     monacoRef.value = monaco;
     const initValue = "";
     inputEditor.value = monaco.editor.create(editorRef.value, {
