@@ -13,6 +13,15 @@ import hospitalAppointmentAnalysis from "./custom/白衣天使";
 import deliveryPerformanceAnalysis from "./custom/极速达人";
 import stockTradingAnalysis from "./custom/华尔街风云";
 import ecommerceUserBehaviorAnalysis from "./custom/数据淘金客";
+import normalization1NF from "./custom/normalization-1nf";
+import normalization2NF from "./custom/normalization-2nf";
+import normalization3NF from "./custom/normalization-3nf";
+import dmlInsertStock from "./custom/dml-insert-stock";
+import dmlUpdateOrderDiscount from "./custom/dml-update-order-discount";
+import dmlDeleteRiskLogin from "./custom/dml-delete-risk-login";
+import dmlInsertSelectCandidate from "./custom/dml-insert-select-candidate";
+import dmlUpdateTeacherBonus from "./custom/dml-update-teacher-bonus";
+import dmlArchiveCancelledOrders from "./custom/dml-archive-cancelled-orders";
 
 /**
  * 自定义关卡列表
@@ -33,6 +42,15 @@ const customLevels: LevelType[] = [
   deliveryPerformanceAnalysis,
   stockTradingAnalysis,
   ecommerceUserBehaviorAnalysis,
+  normalization1NF,
+  normalization2NF,
+  normalization3NF,
+  dmlInsertStock,
+  dmlUpdateOrderDiscount,
+  dmlDeleteRiskLogin,
+  dmlInsertSelectCandidate,
+  dmlUpdateTeacherBonus,
+  dmlArchiveCancelledOrders,
 ];
 
 export default customLevels;
