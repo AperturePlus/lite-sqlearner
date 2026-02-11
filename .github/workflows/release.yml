@@ -34,9 +34,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Generate icons
-        run: yarn icon:generate
-
       - name: Build Vite + Electron
         run: yarn build
 
