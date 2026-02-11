@@ -11,14 +11,13 @@ permissions:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
             platform: win
           - os: macos-latest
             platform: mac
-          - os: ubuntu-latest
-            platform: linux
 
     runs-on: ${{ matrix.os }}
 
@@ -53,8 +52,6 @@ jobs:
           path: |
             release/*.exe
             release/*.dmg
-            release/*.AppImage
-            release/*.deb
             release/*.yml
             release/*.yaml
           if-no-files-found: ignore
@@ -82,7 +79,5 @@ jobs:
           files: |
             artifacts/**/*.exe
             artifacts/**/*.dmg
-            artifacts/**/*.AppImage
-            artifacts/**/*.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
