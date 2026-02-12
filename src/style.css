@@ -204,6 +204,110 @@ a {
   color: var(--link-color);
 }
 
+[data-theme="dark"] .markdown-body {
+  background: transparent !important;
+  color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .markdown-body h1,
+[data-theme="dark"] .markdown-body h2,
+[data-theme="dark"] .markdown-body h3,
+[data-theme="dark"] .markdown-body h4,
+[data-theme="dark"] .markdown-body h5,
+[data-theme="dark"] .markdown-body h6,
+[data-theme="dark"] .markdown-body p,
+[data-theme="dark"] .markdown-body li,
+[data-theme="dark"] .markdown-body strong,
+[data-theme="dark"] .markdown-body em {
+  color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .markdown-body blockquote {
+  color: #cbd5e1 !important;
+  border-left-color: rgba(100, 116, 139, 0.7) !important;
+}
+
+[data-theme="dark"] .markdown-body hr {
+  border-color: rgba(71, 85, 105, 0.6) !important;
+}
+
+[data-theme="dark"] .markdown-body code {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  color: #bfdbfe !important;
+}
+
+[data-theme="dark"] .markdown-body pre {
+  background: rgba(2, 6, 23, 0.72) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+[data-theme="dark"] .markdown-body pre code {
+  background: transparent !important;
+  border: none;
+  color: #dbeafe !important;
+}
+
+[data-theme="dark"] .markdown-body .hljs {
+  background: rgba(2, 6, 23, 0.72) !important;
+  color: #dbeafe !important;
+}
+
+[data-theme="dark"] .markdown-body .hljs-comment,
+[data-theme="dark"] .markdown-body .hljs-quote {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .markdown-body .hljs-keyword,
+[data-theme="dark"] .markdown-body .hljs-selector-tag,
+[data-theme="dark"] .markdown-body .hljs-name,
+[data-theme="dark"] .markdown-body .hljs-tag {
+  color: #fda4af !important;
+}
+
+[data-theme="dark"] .markdown-body .hljs-string,
+[data-theme="dark"] .markdown-body .hljs-template-tag,
+[data-theme="dark"] .markdown-body .hljs-template-variable {
+  color: #86efac !important;
+}
+
+[data-theme="dark"] .markdown-body .hljs-number,
+[data-theme="dark"] .markdown-body .hljs-literal,
+[data-theme="dark"] .markdown-body .hljs-variable,
+[data-theme="dark"] .markdown-body .hljs-attr,
+[data-theme="dark"] .markdown-body .hljs-attribute {
+  color: #93c5fd !important;
+}
+
+[data-theme="dark"] .markdown-body .hljs-title,
+[data-theme="dark"] .markdown-body .hljs-section,
+[data-theme="dark"] .markdown-body .hljs-built_in,
+[data-theme="dark"] .markdown-body .hljs-type {
+  color: #fcd34d !important;
+}
+
+[data-theme="dark"] .markdown-body table tr {
+  background: transparent !important;
+}
+
+[data-theme="dark"] .markdown-body table tr:nth-child(2n) {
+  background: rgba(15, 23, 42, 0.45) !important;
+}
+
+[data-theme="dark"] .markdown-body table th,
+[data-theme="dark"] .markdown-body table td {
+  border-color: rgba(71, 85, 105, 0.65) !important;
+}
+
+[data-theme="dark"] .markdown-body table th {
+  background: rgba(30, 41, 59, 0.8) !important;
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .markdown-body a {
+  color: #93c5fd !important;
+}
+
 /* Dark Mode Drawer Fixes */
 [data-theme="dark"] .ant-drawer-title,
 [data-theme="dark"] .ant-drawer-close {

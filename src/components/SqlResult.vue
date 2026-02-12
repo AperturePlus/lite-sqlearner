@@ -2,20 +2,21 @@
   <a-card
     id="sqlResult"
     class="sql-result-card"
-    title="执行结果"
-    :extra="RESULT_STATUS_INFO_MAP[resultStatus as unknown as keyof typeof RESULT_STATUS_INFO_MAP]"
+    :title="t('result.title')"
+    :extra="statusText"
     :bordered="false"
   >
     <sql-result-table v-if="!errorMsg" :result="result" />
-    <div v-else>❌ 语句错误:{{ errorMsg }}</div>
+    <div v-else>{{ t("result.errorPrefix") }}{{ errorMsg }}</div>
   </a-card>
 </template>
 
 <script setup lang="ts">
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { QueryExecResult } from "sql.js";
 import SqlResultTable from "./SqlResultTable.vue";
-import { RESULT_STATUS_INFO_MAP } from "../core/result";
+import { RESULT_STATUS_ENUM } from "../core/result";
+import { useAppI18n } from "../composables/useAppI18n";
 
 interface Props {
   result: QueryExecResult[];
@@ -30,6 +31,16 @@ const props = withDefaults(defineProps<Props>(), {
   result: () => [],
   answerResult: () => [],
   errorMsg: () => "",
+});
+const { t } = useAppI18n();
+const statusText = computed(() => {
+  if (props.resultStatus === RESULT_STATUS_ENUM.SUCCEED) {
+    return t("result.status.success");
+  }
+  if (props.resultStatus === RESULT_STATUS_ENUM.ERROR) {
+    return t("result.status.error");
+  }
+  return t("result.status.default");
 });
 
 // e.g. [{"columns":["a","b"],"values":[[0,"hello"],[1,"world"]]}]

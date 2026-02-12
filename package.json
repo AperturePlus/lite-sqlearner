@@ -53,6 +53,11 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "include": "build/installer.nsh",
+      "multiLanguageInstaller": true,
+      "installerLanguages": [
+        "en_US",
+        "zh_CN"
+      ],
       "perMachine": false,
       "allowElevation": true,
       "createDesktopShortcut": "always",

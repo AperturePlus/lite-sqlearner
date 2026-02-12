@@ -5,3 +5,11 @@ declare module "*.vue" {
   const component: DefineComponent<{}, {}, any>;
   export default component;
 }
+
+interface ElectronBridge {
+  getSystemLocale?: () => Promise<string>;
+}
+
+interface Window {
+  electron?: ElectronBridge;
+}

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, shell } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, shell } from "electron";
 import path from "path";
 
 const APP_ID = "com.lite.sqlearner";
@@ -85,6 +85,12 @@ if (gotTheLock) {
   });
 
   app.whenReady().then(() => {
+    ipcMain.handle("app:get-system-locale", () => {
+      const preferredLanguages = app.getPreferredSystemLanguages?.() || [];
+      const firstPreferred = preferredLanguages[0];
+      return firstPreferred || app.getLocale() || "en-US";
+    });
+
     createWindow();
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {

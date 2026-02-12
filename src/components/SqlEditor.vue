@@ -3,10 +3,10 @@
     <div ref="editorRef" :style="editorStyle" />
     <a-space :size="16" style="margin-top: 16px">
       <a-button type="primary" style="width: 180px" @click="doSubmit">
-        运行
+        {{ t("editor.run") }}
       </a-button>
-      <a-button @click="doFormat">格式化</a-button>
-      <a-button @click="doReset">重置</a-button>
+      <a-button @click="doFormat">{{ t("editor.format") }}</a-button>
+      <a-button @click="doReset">{{ t("editor.reset") }}</a-button>
     </a-space>
   </div>
 </template>
@@ -29,6 +29,7 @@ import { Database, QueryExecResult } from "sql.js";
 import { message } from "ant-design-vue";
 import { useGlobalStore } from "../core/globalStore";
 import { ensureMonacoSqlLanguage } from "../core/monacoSql";
+import { useAppI18n } from "../composables/useAppI18n";
 
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
@@ -52,6 +53,7 @@ const editorRef = ref<HTMLElement>();
 const monacoRef = ref<any>(null);
 const db = ref<Database | null>(null);
 const globalStore = useGlobalStore();
+const { t, locale } = useAppI18n();
 const editorTheme = computed(() =>
   globalStore.theme === "dark" ? "vs-dark" : "vs"
 );
@@ -64,17 +66,21 @@ const closeDB = () => {
 };
 
 let initVersion = 0;
+let submitVersion = 0;
 
 watch(
-  [() => level.value.key, inputEditor],
+  [() => level.value.key, inputEditor, locale],
   async () => {
     if (!inputEditor.value) {
       return;
     }
 
+    // 关卡或语言变更时，使历史提交结果失效，避免旧结果回写
+    submitVersion += 1;
+
     // 初始化 / 更新默认 SQL
     toRaw(inputEditor.value).setValue(
-      "-- 请在此处输入 SQL\n" + level.value.defaultSQL
+      `${t("editor.placeholder")}\n${level.value.defaultSQL}`
     );
 
     // 初始化 / 更新 DB
@@ -147,6 +153,7 @@ const doSubmit = async () => {
   if (!inputEditor.value || !db.value) {
     return;
   }
+  const currentSubmitVersion = ++submitVersion;
   const inputStr = toRaw(inputEditor.value).getValue();
   let answerDB: Database | null = null;
   try {
@@ -154,10 +161,16 @@ const doSubmit = async () => {
     // 答案在全新的干净 DB 上执行，隔离用户操作
     answerDB = await initDB(level.value.initSQL);
     const answerResult = runSQL(answerDB, level.value.answer);
+    if (currentSubmitVersion !== submitVersion) {
+      return;
+    }
     // 向外层传递结果
     onSubmit?.value(inputStr, result, answerResult);
   } catch (error: any) {
-    message.error("语句错误，" + error.message);
+    if (currentSubmitVersion !== submitVersion) {
+      return;
+    }
+    message.error(t("editor.error", { message: error.message }));
     // 向外层传递结果
     onSubmit?.value(inputStr, [], [], error.message);
   } finally {
