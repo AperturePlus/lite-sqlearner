@@ -1,9 +1,9 @@
 {
-  "name": "sql-mother",
+  "name": "lite-sqlearner",
   "private": true,
   "version": "0.0.1",
-  "description": "Interactive SQL training playground desktop application",
-  "author": "SQL Training Ground Team",
+  "description": "An interactive, gamified SQL learning desktop application",
+  "author": "Lite-SQLearner Team",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
@@ -14,8 +14,9 @@
     "preview": "vite preview"
   },
   "build": {
-    "appId": "com.sql.training.ground",
-    "productName": "SQL Training Ground",
+    "appId": "com.lite.sqlearner",
+    "productName": "Lite-SQLearner",
+    "executableName": "Lite-SQLearner",
     "directories": {
       "output": "release",
       "buildResources": "build"
@@ -51,6 +52,7 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
+      "include": "build/installer.nsh",
       "perMachine": false,
       "allowElevation": true,
       "createDesktopShortcut": "always",

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/logo.svg" alt="SQL Training Ground" width="80" height="80" />
+  <img src="public/logo.svg" alt="Lite-SQLearner" width="80" height="80" />
 </p>
 
-<h1 align="center">SQL Training Ground</h1>
+<h1 align="center">Lite-SQLearner</h1>
 
 <p align="center">
   An interactive, gamified SQL learning desktop application — practice SQL right in your browser with zero setup.
@@ -98,7 +98,7 @@ The packaged application will be output to the `release/` directory.
 ## 📁 Project Structure
 
 ```
-sql-training-ground/
+lite-sqlearner/
 ├── electron/          # Electron main & preload scripts
 ├── public/            # Static assets (logo, WASM binary)
 ├── src/

@@ -1,15 +1,15 @@
 <template>
   <div id="app">
     <a-row class="header" type="flex" align="middle">
-      <a-col flex="160px" style="margin: 0 auto">
-        <RouterLink to="/">
-          <a-row align="middle">
-            <img src="./assets/logo.svg" alt="SQLearner" class="logo" />
-            <span class="title">SQLearner</span>
-          </a-row>
+      <a-col flex="none" class="brand-col">
+        <RouterLink to="/" class="brand-link">
+          <div class="brand-content">
+            <img src="./assets/logo.svg" alt="Lite-SQLearner" class="logo" />
+            <span class="title">Lite-SQLearner</span>
+          </div>
         </RouterLink>
       </a-col>
-      <a-col flex="auto">
+      <a-col flex="auto" class="menu-col">
         <a-menu
           :selected-keys="selectedKeys"
           mode="horizontal"
@@ -34,7 +34,7 @@
       <router-view />
     </div>
     <div class="footer">
-      <p>SQLearner - SQL 自学网站 ©{{ currentYear }}</p>
+      <p>Lite-SQLearner - SQL 自学网站 ©{{ currentYear }}</p>
     </div>
     <a-back-top :style="{ right: '60px' }" />
 
@@ -108,6 +108,26 @@ watch(
   background: var(--header-bg);
 }
 
+.brand-col {
+  flex-shrink: 0;
+}
+
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-content {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.menu-col {
+  min-width: 0;
+  padding: 0 16px;
+}
+
 .ant-menu-horizontal {
   border-bottom: none !important;
 }
@@ -119,6 +139,8 @@ watch(
 .title {
   margin-left: 8px;
   font-size: 20px;
+  line-height: 1;
+  white-space: nowrap;
   color: var(--text-color);
 }
 
@@ -130,6 +152,7 @@ watch(
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .footer {

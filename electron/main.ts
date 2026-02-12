@@ -1,7 +1,7 @@
 import { app, BrowserWindow, Menu, shell } from "electron";
 import path from "path";
 
-const APP_ID = "com.sql.training.ground";
+const APP_ID = "com.lite.sqlearner";
 const isDev = Boolean(process.env.VITE_DEV_SERVER_URL);
 let mainWindow: BrowserWindow | null = null;
 
