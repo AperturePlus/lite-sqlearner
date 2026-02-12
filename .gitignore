@@ -26,3 +26,5 @@ build/.icon-work
 *.sw?
 .vercel
 release
+
+.vscode/
