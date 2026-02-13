@@ -190,7 +190,9 @@ const localizedCustomLevels = computed(() => {
   return localizeLevels(baseCustomLevels, locale.value);
 });
 const level = computed(() => {
-  const baseLevel = props.levelKey ? getLevelByKey(props.levelKey) : allLevels[0];
+  const baseLevel = props.levelKey
+    ? getLevelByKey(props.levelKey)
+    : allLevels[0];
   return localizeLevel(baseLevel, locale.value);
 });
 

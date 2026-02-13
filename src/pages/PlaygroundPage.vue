@@ -7,6 +7,7 @@
           :level="firstLevel"
           :editor-style="{ height: 480 + 'px' }"
           :on-submit="onSubmit"
+          :result-status="resultStatus"
         />
         <a-card :title="t('playground.history')" style="margin-top: 16px">
           <a-collapse v-if="sqlHistoryList.length > 0">
@@ -15,14 +16,18 @@
               :key="index"
               :header="data.sql"
             >
-              <sql-result :result="data.result" :error-msg="data.errorMsg" />
+              <sql-result
+                :result="data.result"
+                :error-msg="data.errorMsg"
+                :result-status="data.resultStatus"
+              />
             </a-collapse-panel>
           </a-collapse>
           <div v-else>{{ t("playground.emptyHistory") }}</div>
         </a-card>
       </a-col>
       <a-col :md="12" :xs="24">
-        <sql-result :result="result" />
+        <sql-result :result="result" :result-status="resultStatus" />
       </a-col>
     </a-row>
   </div>
@@ -45,25 +50,41 @@ const { t, locale } = useAppI18n();
 const firstLevel = computed(() => localizeLevel(allLevels[0], locale.value));
 
 const result = ref<QueryExecResult[]>([]);
-const sqlHistoryList = ref<any>([]);
+const resultStatus = ref(0);
+const sqlHistoryList = ref<
+  {
+    sql: string;
+    result: QueryExecResult[];
+    resultStatus: number;
+    errorMsg?: string;
+  }[]
+>([]);
 
 /**
  * 执行
  * @param sql
  * @param res
- * @param _
+ * @param answerResult
  * @param errorMsg
  */
 const onSubmit = (
   sql: string,
   res: QueryExecResult[],
-  _: any,
+  answerResult: QueryExecResult[],
   errorMsg?: string
 ) => {
+  const status = errorMsg
+    ? -1
+    : JSON.stringify(res) === JSON.stringify(answerResult)
+    ? 1
+    : -1;
+
   result.value = res;
+  resultStatus.value = status;
   sqlHistoryList.value.push({
     sql,
     result: res,
+    resultStatus: status,
     errorMsg,
   });
 };

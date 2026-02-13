@@ -22,7 +22,13 @@ pinia.use(piniaPluginPersistedstate);
 
 const detectSystemLocale = async () => {
   try {
-    const electronLocale = await window.electron?.getSystemLocale?.();
+    const electronLocale = await (
+      window as Window & {
+        electron?: {
+          getSystemLocale?: () => Promise<string> | string;
+        };
+      }
+    ).electron?.getSystemLocale?.();
     if (electronLocale) {
       return electronLocale;
     }

@@ -44,9 +44,13 @@
             </button>
 
             <div class="trail-marker trail-end">
-              {{ t("levels.marker.peak", { level: localizedMainLevels.length }) }}
+              {{
+                t("levels.marker.peak", { level: localizedMainLevels.length })
+              }}
             </div>
-            <div class="trail-marker trail-start">{{ t("levels.marker.base") }}</div>
+            <div class="trail-marker trail-start">
+              {{ t("levels.marker.base") }}
+            </div>
           </div>
         </div>
       </section>
@@ -60,7 +64,9 @@
               {{ t("common.levelUnit") }}</a-tag
             >
           </h2>
-          <p class="section-subtitle">{{ t("levels.section.customSubtitle") }}</p>
+          <p class="section-subtitle">
+            {{ t("levels.section.customSubtitle") }}
+          </p>
         </div>
 
         <div class="branch-grid">

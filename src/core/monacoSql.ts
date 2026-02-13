@@ -23,7 +23,7 @@ export const ensureMonacoSqlLanguage = async (monaco: MonacoApi) => {
       monaco.languages.register({ id: "sql" });
     }
 
-    monaco.languages.setMonarchTokensProvider("sql", sqlLang.language as any);
+    monaco.languages.setMonarchTokensProvider("sql", sqlLang.language);
     monaco.languages.setLanguageConfiguration("sql", sqlLang.conf);
     sqlLanguageReady = true;
   })().finally(() => {

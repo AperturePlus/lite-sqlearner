@@ -32,10 +32,10 @@ export const useGlobalStore = defineStore("global", {
   persist: {
     key: "global",
     storage: window.localStorage,
-    beforeRestore: (context) => {
+    beforeRestore: () => {
       console.log("load globalStore data start");
     },
-    afterRestore: (context) => {
+    afterRestore: () => {
       console.log("load globalStore data end");
     },
   },

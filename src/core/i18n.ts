@@ -306,8 +306,7 @@ const messages: Record<AppLocale, MessageNode> = {
           "My SQL execution failed. Please analyze this error: {error}",
       },
       systemPrompt: {
-        role:
-          "You are an SQL learning assistant. Help users understand and improve SQL with concise explanations and practical examples.",
+        role: "You are an SQL learning assistant. Help users understand and improve SQL with concise explanations and practical examples.",
         question: "Current challenge content:",
         schema: "Database schema (DDL):",
         userSql: "User SQL:",
@@ -387,7 +386,9 @@ export const t = (
   params?: Record<string, string | number>
 ): string => {
   const template =
-    getByPath(messages[locale], key) ?? getByPath(messages["zh-CN"], key) ?? key;
+    getByPath(messages[locale], key) ??
+    getByPath(messages["zh-CN"], key) ??
+    key;
   if (!params) {
     return template;
   }

@@ -150,7 +150,9 @@ const fetchModels = async () => {
 
     if (models.length > 0) {
       fetchedModels.value = models;
-      message.success(t("ai.config.fetchModelsSuccess", { count: models.length }));
+      message.success(
+        t("ai.config.fetchModelsSuccess", { count: models.length })
+      );
       // 如果当前没有选模型，或者当前选的模型不在列表中，可以考虑默认选中第一个？
       // 暂时保持用户当前输入，除非是空的
       if (!formData.value.model) {
