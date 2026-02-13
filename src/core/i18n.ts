@@ -95,6 +95,9 @@ const messages: Record<AppLocale, MessageNode> = {
         default: "未执行",
         error: "❌ 错误",
         success: "✅ 正确",
+        executionDefault: "未执行",
+        executionError: "❌ 执行失败",
+        executionSuccess: "✅ 执行成功",
       },
     },
     ai: {
@@ -267,6 +270,9 @@ const messages: Record<AppLocale, MessageNode> = {
         default: "Not Run",
         error: "❌ Incorrect",
         success: "✅ Correct",
+        executionDefault: "Not Run",
+        executionError: "❌ Execution Failed",
+        executionSuccess: "✅ Execution Succeeded",
       },
     },
     ai: {

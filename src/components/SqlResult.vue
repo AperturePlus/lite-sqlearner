@@ -20,8 +20,9 @@ import { useAppI18n } from "../composables/useAppI18n";
 
 interface Props {
   result: QueryExecResult[];
-  answerResult: QueryExecResult[];
+  answerResult?: QueryExecResult[];
   resultStatus: number;
+  statusMode?: "answer" | "execution";
   errorMsg?: string;
   // eslint-disable-next-line vue/require-default-prop
   level?: LevelType;
@@ -30,17 +31,27 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   result: () => [],
   answerResult: () => [],
+  statusMode: "answer",
   errorMsg: () => "",
 });
 const { t } = useAppI18n();
 const statusText = computed(() => {
+  const isExecutionMode = props.statusMode === "execution";
   if (props.resultStatus === RESULT_STATUS_ENUM.SUCCEED) {
-    return t("result.status.success");
+    return t(
+      isExecutionMode
+        ? "result.status.executionSuccess"
+        : "result.status.success"
+    );
   }
   if (props.resultStatus === RESULT_STATUS_ENUM.ERROR) {
-    return t("result.status.error");
+    return t(
+      isExecutionMode ? "result.status.executionError" : "result.status.error"
+    );
   }
-  return t("result.status.default");
+  return t(
+    isExecutionMode ? "result.status.executionDefault" : "result.status.default"
+  );
 });
 
 // e.g. [{"columns":["a","b"],"values":[[0,"hello"],[1,"world"]]}]

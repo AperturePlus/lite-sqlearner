@@ -20,6 +20,7 @@
                 :result="data.result"
                 :error-msg="data.errorMsg"
                 :result-status="data.resultStatus"
+                status-mode="execution"
               />
             </a-collapse-panel>
           </a-collapse>
@@ -27,7 +28,11 @@
         </a-card>
       </a-col>
       <a-col :md="12" :xs="24">
-        <sql-result :result="result" :result-status="resultStatus" />
+        <sql-result
+          :result="result"
+          :result-status="resultStatus"
+          status-mode="execution"
+        />
       </a-col>
     </a-row>
   </div>
@@ -36,6 +41,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from "vue";
 import { QueryExecResult } from "sql.js";
+import { RESULT_STATUS_ENUM } from "../core/result";
 import { allLevels } from "../levels";
 import { useAppI18n } from "../composables/useAppI18n";
 import { localizeLevel } from "../levels/i18n";
@@ -50,7 +56,7 @@ const { t, locale } = useAppI18n();
 const firstLevel = computed(() => localizeLevel(allLevels[0], locale.value));
 
 const result = ref<QueryExecResult[]>([]);
-const resultStatus = ref(0);
+const resultStatus = ref<number>(RESULT_STATUS_ENUM.DEFAULT);
 const sqlHistoryList = ref<
   {
     sql: string;
@@ -73,11 +79,11 @@ const onSubmit = (
   answerResult: QueryExecResult[],
   errorMsg?: string
 ) => {
+  // Playground 只展示执行是否成功，不做关卡答案判题
+  void answerResult;
   const status = errorMsg
-    ? -1
-    : JSON.stringify(res) === JSON.stringify(answerResult)
-    ? 1
-    : -1;
+    ? RESULT_STATUS_ENUM.ERROR
+    : RESULT_STATUS_ENUM.SUCCEED;
 
   result.value = res;
   resultStatus.value = status;
