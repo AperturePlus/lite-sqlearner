@@ -133,8 +133,7 @@ const MAIN_LEVEL_META: Record<string, LevelMeta> = {
   },
   level13: {
     title: "SQL Basics - CASE WHEN",
-    task:
-      "For each student, return `name` and an `age_level` label: `Senior` if age > 60, `Adult` if age > 20, otherwise `Junior`. Order by name ascending.",
+    task: "For each student, return `name` and an `age_level` label: `Senior` if age > 60, `Adult` if age > 20, otherwise `Junior`. Order by name ascending.",
     hint: "Use a multi-branch `CASE WHEN` expression.",
   },
   level14: {
@@ -229,7 +228,8 @@ const MAIN_ANSWER_OVERRIDES: Record<string, string> = {
   level5: "select name, score from student where name = 'Yupi'",
   level6: "select name, age from student where name != 'HotDog'",
   level8: "select name, score from student where name not like '%Li%'",
-  level9: "select name, score from student where name like '%Li%' or score > 500;",
+  level9:
+    "select name, score from student where name like '%Li%' or score > 500;",
   level13:
     "SELECT\n" +
     "  name,\n" +
@@ -271,14 +271,12 @@ const CUSTOM_META: Record<string, LevelMeta> = {
   game_data_analysis: {
     title: "Game Data Analytics",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Use `CASE WHEN` for win counts and `HAVING` for game count filtering. Handle division by zero carefully.",
+    hint: "Use `CASE WHEN` for win counts and `HAVING` for game count filtering. Handle division by zero carefully.",
   },
   financial_transaction_analysis: {
     title: "Investment Analytics",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Use subqueries for hot stocks and compute volatility as (max - min) / average price.",
+    hint: "Use subqueries for hot stocks and compute volatility as (max - min) / average price.",
   },
   social_media_analysis: {
     title: "Social Feed Secrets",
@@ -288,8 +286,7 @@ const CUSTOM_META: Record<string, LevelMeta> = {
   logistics_delivery_analysis: {
     title: "Logistics Arena",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Use `JULIANDAY` for time difference, combine with subqueries/window functions, and sort percentage strings carefully.",
+    hint: "Use `JULIANDAY` for time difference, combine with subqueries/window functions, and sort percentage strings carefully.",
   },
   movie_box_office_analysis: {
     title: "Box Office Champion",
@@ -299,91 +296,76 @@ const CUSTOM_META: Record<string, LevelMeta> = {
   restaurant_business_analysis: {
     title: "Food Empire",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Group by category and calculate revenue, order count, average price, and member ratio.",
+    hint: "Group by category and calculate revenue, order count, average price, and member ratio.",
   },
   book_sales_analysis: {
     title: "Book Sales Analytics",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Group by category and use subquery to locate the highest-grossing book per category.",
+    hint: "Group by category and use subquery to locate the highest-grossing book per category.",
   },
   hospital_appointment_analysis: {
     title: "White Angel",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Use grouping, subqueries for peak time slots, and `CASE WHEN` for gender ratio.",
+    hint: "Use grouping, subqueries for peak time slots, and `CASE WHEN` for gender ratio.",
   },
   delivery_performance_analysis: {
     title: "Delivery Masters",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Use `SUM` and ratio formulas for success rate and efficiency. Filter order volume with `HAVING`.",
+    hint: "Use `SUM` and ratio formulas for success rate and efficiency. Filter order volume with `HAVING`.",
   },
   stock_trading_analysis: {
     title: "Wall Street Storm",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Combine subqueries and window functions; pay attention to `HAVING` position and calculation order.",
+    hint: "Combine subqueries and window functions; pay attention to `HAVING` position and calculation order.",
   },
   ecommerce_user_behavior_analysis: {
     title: "Data Prospector",
     task: "Solve this scenario challenge and match the expected result set.",
-    hint:
-      "Use `CASE WHEN` for age buckets, subqueries for hot categories, and compute VIP/gender ratios.",
+    hint: "Use `CASE WHEN` for age buckets, subqueries for hot categories, and compute VIP/gender ratios.",
   },
   normalization1nf: {
     title: "Normalization Training - 1NF Atomic Values",
-    task:
-      "Flatten repeated course columns in `student_course_wide` and output `student_id`, `student_name`, and `course_name`.",
+    task: "Flatten repeated course columns in `student_course_wide` and output `student_id`, `student_name`, and `course_name`.",
     hint: "Use `UNION ALL` and filter out null courses.",
   },
   normalization2nf: {
     title: "Normalization Training - 2NF Partial Dependency Removal",
-    task:
-      "Split `enrollment_raw` into student dimension, course dimension, and enrollment fact result sets.",
+    task: "Split `enrollment_raw` into student dimension, course dimension, and enrollment fact result sets.",
     hint: "Extract stable dimensions first, then keep fact table (`student_id`, `course_id`, `score`).",
   },
   normalization3nf: {
     title: "Normalization Training - 3NF / BCNF",
-    task:
-      "Remove transitive dependency in `teaching_record_raw` by producing student, advisor, department, course, and enrollment result sets.",
+    task: "Remove transitive dependency in `teaching_record_raw` by producing student, advisor, department, course, and enrollment result sets.",
     hint: "Separate advisor-department dependency before preserving enrollment facts.",
   },
   dmlInsertStock: {
     title: "DML Training - Batch INSERT",
-    task:
-      "Insert required rows into `warehouse_stock`, then query all rows to verify the final table state.",
+    task: "Insert required rows into `warehouse_stock`, then query all rows to verify the final table state.",
     hint: "You can insert multiple rows in one `INSERT` statement.",
   },
   dmlUpdateOrderDiscount: {
     title: "DML Training - Conditional UPDATE",
-    task:
-      "Update discount and final amount in `sales_order` based on payment status and membership.",
+    task: "Update discount and final amount in `sales_order` based on payment status and membership.",
     hint: "Use `CASE WHEN` and `ROUND(..., 2)`.",
   },
   dmlDeleteRiskLogin: {
     title: "DML Training - DELETE Risk Logs",
-    task:
-      "Delete login records whose IP exists in blacklist, then aggregate remaining login counts by user.",
+    task: "Delete login records whose IP exists in blacklist, then aggregate remaining login counts by user.",
     hint: "`DELETE` with subquery is a common pattern.",
   },
   dmlInsertSelectCandidate: {
     title: "DML Training - INSERT INTO ... SELECT",
-    task:
-      "Insert qualified candidates from `applicant_raw` into `candidate_pool` and query final pool data.",
+    task: "Insert qualified candidates from `applicant_raw` into `candidate_pool` and query final pool data.",
     hint: "Put screening rules inside `SELECT ... WHERE`.",
   },
   dmlUpdateTeacherBonus: {
     title: "DML Training - UPDATE Bonus Backfill",
-    task:
-      "Calculate and update teacher bonus using class count, score, and attendance penalty, then query bonuses.",
+    task: "Calculate and update teacher bonus using class count, score, and attendance penalty, then query bonuses.",
     hint: "Use correlated subquery for absence count and keep lower bound at 0.",
   },
   dmlArchiveCancelledOrders: {
     title: "DML Training - Archive and Delete Cancelled Orders",
-    task:
-      "Archive old cancelled orders from `orders_live` to `orders_archive`, then delete them from live table.",
+    task: "Archive old cancelled orders from `orders_live` to `orders_archive`, then delete them from live table.",
     hint: "Run `INSERT ... SELECT` first, then `DELETE`.",
   },
 };
@@ -469,7 +451,10 @@ const getEnglishOverrides = (level: LevelType): LocalizedLevelOverrides => {
   };
 };
 
-export const localizeLevel = (level: LevelType, locale: AppLocale): LevelType => {
+export const localizeLevel = (
+  level: LevelType,
+  locale: AppLocale
+): LevelType => {
   if (locale !== "en-US") {
     return level;
   }
