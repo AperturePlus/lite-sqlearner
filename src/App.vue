@@ -1,53 +1,69 @@
 <template>
-  <div id="app">
-    <a-row class="header" type="flex" align="middle">
-      <a-col flex="none" class="brand-col">
-        <RouterLink to="/" class="brand-link">
-          <div class="brand-content">
-            <img src="./assets/logo.svg" alt="Lite-SQLearner" class="logo" />
-            <span class="title">Lite-SQLearner</span>
-          </div>
-        </RouterLink>
-      </a-col>
-      <a-col flex="auto" class="menu-col">
-        <a-menu
-          :selected-keys="selectedKeys"
-          mode="horizontal"
-          :style="{ lineHeight: '64px' }"
-          @click="doClickMenu"
-        >
-          <a-menu-item key="/learn">学习</a-menu-item>
-          <a-menu-item key="/levels">关卡</a-menu-item>
-          <a-menu-item key="/playground">广场</a-menu-item>
-        </a-menu>
-      </a-col>
-      <a-col flex="140px" class="theme-toggle">
-        <a-switch
-          :checked="isDark"
-          checked-children="深色"
-          un-checked-children="浅色"
-          @change="handleThemeChange"
-        />
-      </a-col>
-    </a-row>
-    <div class="content">
-      <router-view />
-    </div>
-    <div class="footer">
-      <p>Lite-SQLearner - SQL 自学网站 ©{{ currentYear }}</p>
-    </div>
-    <a-back-top :style="{ right: '60px' }" />
+  <a-config-provider :locale="antLocale">
+    <div id="app">
+      <a-row class="header" type="flex" align="middle">
+        <a-col flex="none" class="brand-col">
+          <RouterLink to="/" class="brand-link">
+            <div class="brand-content">
+              <img src="./assets/logo.svg" alt="Lite-SQLearner" class="logo" />
+              <span class="title">Lite-SQLearner</span>
+            </div>
+          </RouterLink>
+        </a-col>
+        <a-col flex="auto" class="menu-col">
+          <a-menu
+            :selected-keys="selectedKeys"
+            mode="horizontal"
+            :style="{ lineHeight: '64px' }"
+            @click="doClickMenu"
+          >
+            <a-menu-item key="/learn">{{ t("app.menu.learn") }}</a-menu-item>
+            <a-menu-item key="/levels">{{ t("app.menu.levels") }}</a-menu-item>
+            <a-menu-item key="/playground">{{
+              t("app.menu.playground")
+            }}</a-menu-item>
+          </a-menu>
+        </a-col>
+        <a-col flex="300px" class="toolbar-col">
+          <a-space :size="12">
+            <a-select
+              v-model:value="languagePreference"
+              size="small"
+              class="language-select"
+              dropdown-class-name="app-language-dropdown"
+              :options="languageOptions"
+            />
+            <a-switch
+              class="theme-switch"
+              :checked="isDark"
+              :checked-children="t('app.theme.dark')"
+              :un-checked-children="t('app.theme.light')"
+              @change="handleThemeChange"
+            />
+          </a-space>
+        </a-col>
+      </a-row>
+      <div class="content">
+        <router-view />
+      </div>
+      <div class="footer">
+        <p>{{ footerText }}</p>
+      </div>
+      <a-back-top :style="{ right: '60px' }" />
 
-    <!-- AI 助手侧边栏 -->
-    <AISidebar v-if="showAISidebar" />
-  </div>
+      <AISidebar v-if="showAISidebar" />
+    </div>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
+import enUS from "ant-design-vue/es/locale/en_US";
+import zhCN from "ant-design-vue/es/locale/zh_CN";
 import { useGlobalStore } from "./core/globalStore";
+import type { LanguagePreference } from "./core/i18n";
+import { useAppI18n } from "./composables/useAppI18n";
 
 const AISidebar = defineAsyncComponent(
   () => import("./components/AISidebar.vue")
@@ -55,6 +71,9 @@ const AISidebar = defineAsyncComponent(
 
 const route = useRoute();
 const router = useRouter();
+const globalStore = useGlobalStore();
+const { t, locale } = useAppI18n();
+
 const selectedKeys = computed(() => {
   if (route.path === "/" || route.path.startsWith("/learn")) {
     return ["/learn"];
@@ -74,11 +93,19 @@ const showAISidebar = computed(() => {
     route.path.startsWith("/playground")
   );
 });
-const globalStore = useGlobalStore();
 const isDark = computed(() => globalStore.theme === "dark");
-
-// 获取当前年份
+const antLocale = computed(() => (locale.value === "en-US" ? enUS : zhCN));
+const languagePreference = computed<LanguagePreference>({
+  get: () => globalStore.languagePreference,
+  set: (value) => globalStore.setLanguagePreference(value),
+});
+const languageOptions = computed(() => [
+  { value: "auto", label: t("app.language.auto") },
+  { value: "zh-CN", label: t("app.language.zhCN") },
+  { value: "en-US", label: t("app.language.enUS") },
+]);
 const currentYear = computed(() => new Date().getFullYear());
+const footerText = computed(() => t("app.footer", { year: currentYear.value }));
 
 const doClickMenu = ({ key }: any) => {
   if (key && key !== "theme") {
@@ -96,6 +123,14 @@ watch(
   () => globalStore.theme,
   (theme) => {
     document.documentElement.setAttribute("data-theme", theme);
+  },
+  { immediate: true }
+);
+
+watch(
+  () => locale.value,
+  (nextLocale) => {
+    document.documentElement.lang = nextLocale;
   },
   { immediate: true }
 );
@@ -148,11 +183,73 @@ watch(
   padding: 24px;
 }
 
-.theme-toggle {
+.toolbar-col {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   flex-shrink: 0;
+}
+
+.language-select {
+  min-width: 130px;
+}
+
+.theme-switch {
+  min-width: 78px;
+}
+
+:global([data-theme="dark"] .language-select .ant-select-selector) {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border-color: rgba(71, 85, 105, 0.55) !important;
+  color: var(--text-color) !important;
+}
+
+:global([data-theme="dark"] .language-select:hover .ant-select-selector),
+:global([data-theme="dark"]
+    .language-select.ant-select-focused
+    .ant-select-selector) {
+  border-color: rgba(96, 165, 250, 0.75) !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15) !important;
+}
+
+:global([data-theme="dark"] .language-select .ant-select-selection-item),
+:global([data-theme="dark"] .language-select .ant-select-arrow) {
+  color: #e2e8f0 !important;
+}
+
+:global([data-theme="dark"] .app-language-dropdown) {
+  background: #0f172a !important;
+  border: 1px solid rgba(71, 85, 105, 0.55);
+  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.5);
+}
+
+:global([data-theme="dark"] .app-language-dropdown .ant-select-item) {
+  color: #e2e8f0 !important;
+}
+
+:global([data-theme="dark"]
+    .app-language-dropdown
+    .ant-select-item-option-active:not(.ant-select-item-option-disabled)) {
+  background: rgba(30, 41, 59, 0.85) !important;
+}
+
+:global([data-theme="dark"]
+    .app-language-dropdown
+    .ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
+  background: rgba(59, 130, 246, 0.22) !important;
+  color: #bfdbfe !important;
+}
+
+:global([data-theme="dark"] .toolbar-col .ant-switch) {
+  background: rgba(71, 85, 105, 0.5) !important;
+}
+
+:global([data-theme="dark"] .toolbar-col .ant-switch-checked) {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+}
+
+:global([data-theme="dark"] .toolbar-col .ant-switch-inner) {
+  color: #e2e8f0 !important;
 }
 
 .footer {

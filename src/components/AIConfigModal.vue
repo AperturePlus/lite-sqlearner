@@ -1,13 +1,13 @@
 <template>
   <a-modal
     v-model:visible="dialogVisible"
-    title="AI 助手配置"
+    :title="t('ai.config.title')"
     :width="600"
     @ok="handleSave"
     @cancel="handleCancel"
   >
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-      <a-form-item label="API 格式">
+      <a-form-item :label="t('ai.config.provider')">
         <a-select
           v-model:value="formData.provider"
           @change="handleProviderChange"
@@ -22,32 +22,32 @@
         </a-select>
       </a-form-item>
 
-      <a-form-item label="Base URL">
+      <a-form-item :label="t('ai.config.baseUrl')">
         <a-input
           v-model:value="formData.baseURL"
-          placeholder="可选，用于自定义 API 端点"
+          :placeholder="t('ai.config.baseUrlPlaceholder')"
         />
       </a-form-item>
 
-      <a-form-item label="API Key">
+      <a-form-item :label="t('ai.config.apiKey')">
         <a-input-password
           v-model:value="formData.apiKey"
-          placeholder="请输入 API Key"
+          :placeholder="t('ai.config.apiKeyPlaceholder')"
         />
       </a-form-item>
 
-      <a-form-item label="模型">
+      <a-form-item :label="t('ai.config.model')">
         <a-input-group compact>
           <a-auto-complete
             v-model:value="formData.model"
             :options="modelOptions"
             style="width: calc(100% - 32px)"
-            placeholder="选择或输入模型名称"
+            :placeholder="t('ai.config.modelPlaceholder')"
             :filter-option="filterModelOption"
           />
           <a-button
             :loading="fetchingModels"
-            title="获取模型列表"
+            :title="t('ai.config.fetchModels')"
             @click="fetchModels"
           >
             <template #icon><sync-outlined :spin="fetchingModels" /></template>
@@ -57,7 +57,9 @@
 
       <a-form-item :wrapper-col="{ offset: 6, span: 18 }">
         <a-space>
-          <a-button :loading="testing" @click="handleTest"> 测试连接 </a-button>
+          <a-button :loading="testing" @click="handleTest">
+            {{ t("ai.config.testConnection") }}
+          </a-button>
           <a-tag
             v-if="testResult"
             :color="testResult.success ? 'green' : 'red'"
@@ -82,6 +84,7 @@ import {
 } from "../core/ai.d";
 import { createAIClient } from "../core/aiClient";
 import { SyncOutlined } from "@ant-design/icons-vue";
+import { useAppI18n } from "../composables/useAppI18n";
 
 interface Props {
   visible: boolean;
@@ -100,6 +103,7 @@ const dialogVisible = computed({
 });
 
 const globalStore = useGlobalStore();
+const { t } = useAppI18n();
 
 // 表单数据
 const formData = ref<AIConfig>({
@@ -135,7 +139,7 @@ const filterModelOption = (input: string, option: any) => {
 // 获取模型列表
 const fetchModels = async () => {
   if (!formData.value.apiKey) {
-    message.warning("请先输入 API Key");
+    message.warning(t("ai.config.inputApiKeyFirst"));
     return;
   }
 
@@ -146,18 +150,20 @@ const fetchModels = async () => {
 
     if (models.length > 0) {
       fetchedModels.value = models;
-      message.success(`成功获取 ${models.length} 个模型`);
+      message.success(
+        t("ai.config.fetchModelsSuccess", { count: models.length })
+      );
       // 如果当前没有选模型，或者当前选的模型不在列表中，可以考虑默认选中第一个？
       // 暂时保持用户当前输入，除非是空的
       if (!formData.value.model) {
         formData.value.model = models[0];
       }
     } else {
-      message.warning("未获取到模型列表，请检查配置或手动输入");
+      message.warning(t("ai.config.noModelsFetched"));
     }
   } catch (error: any) {
     console.error("Fetch models error:", error);
-    message.error("获取模型列表失败，请手动输入");
+    message.error(t("ai.config.fetchModelsFailed"));
   } finally {
     fetchingModels.value = false;
   }
@@ -177,7 +183,7 @@ const handleProviderChange = () => {
 // 测试连接
 const handleTest = async () => {
   if (!formData.value.apiKey) {
-    message.warning("请先输入 API Key");
+    message.warning(t("ai.config.inputApiKeyFirst"));
     return;
   }
 
@@ -191,22 +197,22 @@ const handleTest = async () => {
     if (response.success) {
       testResult.value = {
         success: true,
-        message: "连接成功！",
+        message: t("ai.config.connectionSuccess"),
       };
-      message.success("连接测试成功！");
+      message.success(t("ai.config.testSuccess"));
     } else {
       testResult.value = {
         success: false,
-        message: response.error || "连接失败",
+        message: response.error || t("ai.config.connectionFailed"),
       };
-      message.error(response.error || "连接测试失败");
+      message.error(response.error || t("ai.config.testFailed"));
     }
   } catch (error: any) {
     testResult.value = {
       success: false,
-      message: error.message || "未知错误",
+      message: error.message || t("ai.config.unknownError"),
     };
-    message.error("连接测试失败：" + error.message);
+    message.error(`${t("ai.config.testFailed")}: ${error.message}`);
   } finally {
     testing.value = false;
   }
@@ -215,12 +221,12 @@ const handleTest = async () => {
 // 保存配置
 const handleSave = () => {
   if (!formData.value.apiKey) {
-    message.warning("请输入 API Key");
+    message.warning(t("ai.config.saveApiKeyFirst"));
     return;
   }
 
   globalStore.aiConfig = { ...formData.value };
-  message.success("AI 配置已保存！");
+  message.success(t("ai.config.saved"));
   emit("update:visible", false);
 };
 

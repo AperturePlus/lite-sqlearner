@@ -2,7 +2,9 @@
   <div id="indexPage" :class="{ 'sidebar-collapsed': isSidebarCollapsed }">
     <aside class="level-sidebar" :class="{ collapsed: isSidebarCollapsed }">
       <div class="sidebar-header">
-        <span v-if="!isSidebarCollapsed" class="sidebar-title">题目列表</span>
+        <span v-if="!isSidebarCollapsed" class="sidebar-title">{{
+          t("index.sidebar.title")
+        }}</span>
         <a-button type="text" class="toggle-btn" @click="toggleSidebar">
           <menu-fold-outlined v-if="!isSidebarCollapsed" />
           <menu-unfold-outlined v-else />
@@ -12,9 +14,9 @@
       <transition name="sidebar-fade" mode="out-in">
         <div v-if="!isSidebarCollapsed" key="full" class="sidebar-content">
           <div class="sidebar-group">
-            <div class="group-title">主线关卡</div>
+            <div class="group-title">{{ t("index.sidebar.mainGroup") }}</div>
             <button
-              v-for="(levelItem, index) in mainLevels"
+              v-for="(levelItem, index) in localizedMainLevels"
               :key="levelItem.key"
               type="button"
               class="level-item"
@@ -27,9 +29,9 @@
           </div>
 
           <div class="sidebar-group">
-            <div class="group-title">自定义关卡</div>
+            <div class="group-title">{{ t("index.sidebar.customGroup") }}</div>
             <button
-              v-for="(levelItem, index) in customLevels"
+              v-for="(levelItem, index) in localizedCustomLevels"
               :key="levelItem.key"
               type="button"
               class="level-item"
@@ -44,7 +46,7 @@
 
         <div v-else key="mini" class="sidebar-mini">
           <button
-            v-for="(levelItem, index) in mainLevels"
+            v-for="(levelItem, index) in localizedMainLevels"
             :key="`mini-main-${levelItem.key}`"
             type="button"
             class="mini-item"
@@ -54,7 +56,7 @@
             {{ index + 1 }}
           </button>
           <button
-            v-for="(levelItem, index) in customLevels"
+            v-for="(levelItem, index) in localizedCustomLevels"
             :key="`mini-custom-${levelItem.key}`"
             type="button"
             class="mini-item"
@@ -72,7 +74,11 @@
         <div class="workspace-title-wrap">
           <h2 class="workspace-title">{{ level.title }}</h2>
           <a-tag :color="level.type === 'main' ? 'blue' : 'orange'">
-            {{ level.type === "main" ? "主线" : "实战" }}
+            {{
+              level.type === "main"
+                ? t("app.levelType.main")
+                : t("app.levelType.custom")
+            }}
           </a-tag>
         </div>
       </div>
@@ -92,7 +98,7 @@
           <a-collapse v-model:active-key="activeKeys" style="margin-top: 16px">
             <a-collapse-panel
               key="result"
-              header="查看执行结果"
+              :header="t('index.collapse.result')"
               class="result-collapse-panel"
             >
               <sql-result
@@ -104,17 +110,21 @@
                 style="margin-top: 16px"
               />
             </a-collapse-panel>
-            <a-collapse-panel v-if="level.hint" key="hint" header="查看提示">
+            <a-collapse-panel
+              v-if="level.hint"
+              key="hint"
+              :header="t('index.collapse.hint')"
+            >
               <p>{{ level.hint }}</p>
             </a-collapse-panel>
-            <a-collapse-panel key="ddl" header="查看建表语句">
+            <a-collapse-panel key="ddl" :header="t('index.collapse.ddl')">
               <code-editor
                 :init-value="level.initSQL"
                 :editor-style="{ minHeight: '400px' }"
                 read-only
               />
             </a-collapse-panel>
-            <a-collapse-panel key="answer" header="查看答案">
+            <a-collapse-panel key="answer" :header="t('index.collapse.answer')">
               <code-editor
                 :init-value="level.answer"
                 :editor-style="{ minHeight: '400px' }"
@@ -141,9 +151,11 @@ import { useRouter } from "vue-router";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import { QueryExecResult } from "sql.js";
 import { allLevels, getLevelByKey } from "../levels";
-import mainLevels from "../levels/mainLevels";
-import customLevels from "../levels/customLevels";
+import baseMainLevels from "../levels/mainLevels";
+import baseCustomLevels from "../levels/customLevels";
 import { checkResult } from "../core/result";
+import { useAppI18n } from "../composables/useAppI18n";
+import { localizeLevel, localizeLevels } from "../levels/i18n";
 
 const SqlEditor = defineAsyncComponent(
   () => import("../components/SqlEditor.vue")
@@ -169,12 +181,19 @@ interface IndexPageProps {
 
 const props = defineProps<IndexPageProps>();
 const router = useRouter();
+const { t, locale } = useAppI18n();
 const isSidebarCollapsed = ref(false);
+const localizedMainLevels = computed(() => {
+  return localizeLevels(baseMainLevels, locale.value);
+});
+const localizedCustomLevels = computed(() => {
+  return localizeLevels(baseCustomLevels, locale.value);
+});
 const level = computed(() => {
-  if (props.levelKey) {
-    return getLevelByKey(props.levelKey);
-  }
-  return allLevels[0];
+  const baseLevel = props.levelKey
+    ? getLevelByKey(props.levelKey)
+    : allLevels[0];
+  return localizeLevel(baseLevel, locale.value);
 });
 
 const result = ref<QueryExecResult[]>([]);
@@ -200,6 +219,13 @@ const isCurrentLevel = (levelKey: string) => {
   return level.value.key === levelKey;
 };
 
+const resetExecutionState = () => {
+  result.value = [];
+  answerResult.value = [];
+  errorMsgRef.value = undefined;
+  resultStatus.value = -1;
+};
+
 // 广播当前上下文给 AI 侧边栏
 const broadcastContext = () => {
   const event = new CustomEvent("updateAIContext", {
@@ -221,6 +247,8 @@ watch(
   () => {
     // 重置折叠面板状态
     activeKeys.value = [...defaultActiveKeys];
+    // 切换关卡 / 语言时先清空结果，避免旧结果短暂残留
+    resetExecutionState();
     // 广播初始上下文
     broadcastContext();
   },

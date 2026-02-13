@@ -1,37 +1,44 @@
 <template>
   <div id="playgroundPage">
-    <h2>请输入任意 SQL 语句，尽情玩耍~</h2>
+    <h2>{{ t("playground.title") }}</h2>
     <a-row :gutter="[16, 16]">
       <a-col :md="12" :xs="24">
         <sql-editor
-          :level="allLevels[0]"
+          :level="firstLevel"
           :editor-style="{ height: 480 + 'px' }"
           :on-submit="onSubmit"
+          :result-status="resultStatus"
         />
-        <a-card title="执行历史" style="margin-top: 16px">
+        <a-card :title="t('playground.history')" style="margin-top: 16px">
           <a-collapse v-if="sqlHistoryList.length > 0">
             <a-collapse-panel
               v-for="(data, index) in sqlHistoryList"
               :key="index"
               :header="data.sql"
             >
-              <sql-result :result="data.result" :error-msg="data.errorMsg" />
+              <sql-result
+                :result="data.result"
+                :error-msg="data.errorMsg"
+                :result-status="data.resultStatus"
+              />
             </a-collapse-panel>
           </a-collapse>
-          <div v-else>暂无执行历史</div>
+          <div v-else>{{ t("playground.emptyHistory") }}</div>
         </a-card>
       </a-col>
       <a-col :md="12" :xs="24">
-        <sql-result :result="result" />
+        <sql-result :result="result" :result-status="resultStatus" />
       </a-col>
     </a-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { QueryExecResult } from "sql.js";
 import { allLevels } from "../levels";
+import { useAppI18n } from "../composables/useAppI18n";
+import { localizeLevel } from "../levels/i18n";
 
 const SqlEditor = defineAsyncComponent(
   () => import("../components/SqlEditor.vue")
@@ -39,27 +46,45 @@ const SqlEditor = defineAsyncComponent(
 const SqlResult = defineAsyncComponent(
   () => import("../components/SqlResult.vue")
 );
+const { t, locale } = useAppI18n();
+const firstLevel = computed(() => localizeLevel(allLevels[0], locale.value));
 
 const result = ref<QueryExecResult[]>([]);
-const sqlHistoryList = ref<any>([]);
+const resultStatus = ref(0);
+const sqlHistoryList = ref<
+  {
+    sql: string;
+    result: QueryExecResult[];
+    resultStatus: number;
+    errorMsg?: string;
+  }[]
+>([]);
 
 /**
  * 执行
  * @param sql
  * @param res
- * @param _
+ * @param answerResult
  * @param errorMsg
  */
 const onSubmit = (
   sql: string,
   res: QueryExecResult[],
-  _: any,
+  answerResult: QueryExecResult[],
   errorMsg?: string
 ) => {
+  const status = errorMsg
+    ? -1
+    : JSON.stringify(res) === JSON.stringify(answerResult)
+    ? 1
+    : -1;
+
   result.value = res;
+  resultStatus.value = status;
   sqlHistoryList.value.push({
     sql,
     result: res,
+    resultStatus: status,
     errorMsg,
   });
 };

@@ -1,20 +1,20 @@
 <template>
   <div id="levelsPage">
     <div class="page-header">
-      <h1 class="page-title">关卡登峰图</h1>
-      <p class="page-description">
-        主线沿山脊攀登，支线如营地分布。选好下一站，继续冲顶。
-      </p>
+      <h1 class="page-title">{{ t("levels.page.title") }}</h1>
+      <p class="page-description">{{ t("levels.page.description") }}</p>
     </div>
 
     <div class="journey-layout">
       <section class="mountain-panel">
         <div class="section-header">
           <h2 class="section-title">
-            主线攀登路线
-            <a-tag color="blue" size="small">{{ mainLevels.length }} 关</a-tag>
+            {{ t("levels.section.main") }}
+            <a-tag color="blue" size="small">
+              {{ localizedMainLevels.length }} {{ t("common.levelUnit") }}
+            </a-tag>
           </h2>
-          <p class="section-subtitle">从山脚到峰顶，按路线逐步提升 SQL 能力</p>
+          <p class="section-subtitle">{{ t("levels.section.mainSubtitle") }}</p>
         </div>
 
         <div ref="mountainViewportRef" class="mountain-map-viewport">
@@ -38,13 +38,19 @@
             >
               <span class="node-index">{{ node.index + 1 }}</span>
               <span class="node-title">{{ node.level.title }}</span>
-              <span class="node-meta">海拔 {{ node.altitude }}m</span>
+              <span class="node-meta">{{
+                t("levels.meta.altitude", { value: node.altitude })
+              }}</span>
             </button>
 
             <div class="trail-marker trail-end">
-              峰顶 · Level {{ mainLevels.length }}
+              {{
+                t("levels.marker.peak", { level: localizedMainLevels.length })
+              }}
             </div>
-            <div class="trail-marker trail-start">山脚 · Level 1</div>
+            <div class="trail-marker trail-start">
+              {{ t("levels.marker.base") }}
+            </div>
           </div>
         </div>
       </section>
@@ -52,17 +58,20 @@
       <section class="branch-panel">
         <div class="section-header">
           <h2 class="section-title">
-            自定义支线
+            {{ t("levels.section.custom") }}
             <a-tag color="orange" size="small"
-              >{{ customLevels.length }} 关</a-tag
+              >{{ localizedCustomLevels.length }}
+              {{ t("common.levelUnit") }}</a-tag
             >
           </h2>
-          <p class="section-subtitle">根据题材选择实战营地，补齐你的技能树</p>
+          <p class="section-subtitle">
+            {{ t("levels.section.customSubtitle") }}
+          </p>
         </div>
 
         <div class="branch-grid">
           <button
-            v-for="(level, index) in customLevels"
+            v-for="(level, index) in localizedCustomLevels"
             :key="level.key"
             type="button"
             class="branch-node"
@@ -83,11 +92,20 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import mainLevels from "../levels/mainLevels";
-import customLevels from "../levels/customLevels";
+import baseMainLevels from "../levels/mainLevels";
+import baseCustomLevels from "../levels/customLevels";
+import { useAppI18n } from "../composables/useAppI18n";
+import { localizeLevels } from "../levels/i18n";
 
 const router = useRouter();
 const mountainViewportRef = ref<HTMLDivElement>();
+const { t, locale } = useAppI18n();
+const localizedMainLevels = computed(() => {
+  return localizeLevels(baseMainLevels, locale.value);
+});
+const localizedCustomLevels = computed(() => {
+  return localizeLevels(baseCustomLevels, locale.value);
+});
 
 const goToLevel = (levelKey: string) => {
   router.push(`/learn/${levelKey}`);
@@ -96,13 +114,13 @@ const goToLevel = (levelKey: string) => {
 const getDifficultyText = (difficulty?: number) => {
   switch (difficulty) {
     case 1:
-      return "简单";
+      return t("levels.difficulty.easy");
     case 2:
-      return "中等";
+      return t("levels.difficulty.medium");
     case 3:
-      return "困难";
+      return t("levels.difficulty.hard");
     default:
-      return "综合";
+      return t("levels.difficulty.mixed");
   }
 };
 
@@ -120,8 +138,8 @@ interface MainTrackNode {
 }
 
 const mainTrackNodes = computed<MainTrackNode[]>(() => {
-  return mainLevels.map((level, index) => {
-    const reverseIndex = mainLevels.length - index - 1;
+  return localizedMainLevels.value.map((level, index) => {
+    const reverseIndex = localizedMainLevels.value.length - index - 1;
     const baseX = TRACK_X_PATTERN[index % TRACK_X_PATTERN.length];
     const sway = Math.sin(index * 0.86) * 6;
     const x = Math.max(14, Math.min(82, baseX + sway));
@@ -140,7 +158,7 @@ const mainTrackHeight = computed(() => {
   return (
     TRACK_TOP_PADDING +
     TRACK_BOTTOM_PADDING +
-    (mainLevels.length - 1) * TRACK_VERTICAL_STEP
+    (localizedMainLevels.value.length - 1) * TRACK_VERTICAL_STEP
   );
 });
 
