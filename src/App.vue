@@ -1,6 +1,6 @@
 <template>
   <a-config-provider :locale="antLocale">
-    <div id="app">
+    <div id="app" :class="{ 'windows-titlebar': useCustomTitleBar }">
       <a-row class="header" type="flex" align="middle">
         <a-col flex="none" class="brand-col">
           <RouterLink to="/" class="brand-link">
@@ -73,6 +73,8 @@ const route = useRoute();
 const router = useRouter();
 const globalStore = useGlobalStore();
 const { t, locale } = useAppI18n();
+const electronBridge = (window as Window).electron;
+const useCustomTitleBar = electronBridge?.platform === "win32";
 
 const selectedKeys = computed(() => {
   if (route.path === "/" || route.path.startsWith("/learn")) {
@@ -123,6 +125,7 @@ watch(
   () => globalStore.theme,
   (theme) => {
     document.documentElement.setAttribute("data-theme", theme);
+    electronBridge?.setWindowTheme?.(theme);
   },
   { immediate: true }
 );
@@ -141,6 +144,13 @@ watch(
   border-bottom: 1px solid var(--border-color);
   padding: 0 24px;
   background: var(--header-bg);
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+#app.windows-titlebar .header {
+  padding-top: 8px;
+  padding-right: 160px;
 }
 
 .brand-col {
@@ -150,6 +160,7 @@ watch(
 .brand-link {
   display: inline-flex;
   align-items: center;
+  -webkit-app-region: no-drag;
 }
 
 .brand-content {
@@ -188,6 +199,11 @@ watch(
   justify-content: flex-end;
   align-items: center;
   flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+:deep(.ant-menu) {
+  -webkit-app-region: no-drag;
 }
 
 .language-select {

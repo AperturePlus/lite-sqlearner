@@ -1,11 +1,53 @@
-import { app, BrowserWindow, ipcMain, Menu, shell } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  nativeTheme,
+  shell,
+} from "electron";
 import path from "path";
 
 const APP_ID = "com.lite.sqlearner";
 const isDev = Boolean(process.env.VITE_DEV_SERVER_URL);
+const isWindows = process.platform === "win32";
+const isMac = process.platform === "darwin";
 let mainWindow: BrowserWindow | null = null;
 
-if (process.platform === "win32") {
+type ThemeMode = "light" | "dark";
+
+const getWindowPalette = (theme: ThemeMode) => {
+  if (theme === "dark") {
+    return {
+      backgroundColor: "#0f172a",
+      titleBarColor: "#0b1220",
+      titleBarSymbolColor: "#e2e8f0",
+    };
+  }
+  return {
+    backgroundColor: "#f7f7f7",
+    titleBarColor: "#ffffff",
+    titleBarSymbolColor: "#0f172a",
+  };
+};
+
+const resolveInitialTheme = (): ThemeMode =>
+  nativeTheme.shouldUseDarkColors ? "dark" : "light";
+
+const applyWindowTheme = (window: BrowserWindow, theme: ThemeMode) => {
+  const palette = getWindowPalette(theme);
+  window.setBackgroundColor(palette.backgroundColor);
+
+  if (isWindows) {
+    window.setTitleBarOverlay({
+      color: palette.titleBarColor,
+      symbolColor: palette.titleBarSymbolColor,
+      height: 36,
+    });
+  }
+};
+
+if (isWindows) {
   app.setAppUserModelId(APP_ID);
 }
 
@@ -15,6 +57,8 @@ if (!gotTheLock) {
 }
 
 const createWindow = () => {
+  const initialTheme = resolveInitialTheme();
+  const palette = getWindowPalette(initialTheme);
   const window = new BrowserWindow({
     width: 1280,
     height: 820,
@@ -22,7 +66,18 @@ const createWindow = () => {
     minHeight: 720,
     show: false,
     autoHideMenuBar: true,
-    backgroundColor: "#0f172a",
+    backgroundColor: palette.backgroundColor,
+    ...(isWindows
+      ? {
+          titleBarStyle: "hidden" as const,
+          titleBarOverlay: {
+            color: palette.titleBarColor,
+            symbolColor: palette.titleBarSymbolColor,
+            height: 36,
+          },
+        }
+      : {}),
+    ...(isMac ? { titleBarStyle: "hiddenInset" as const } : {}),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -89,6 +144,15 @@ if (gotTheLock) {
       const preferredLanguages = app.getPreferredSystemLanguages?.() || [];
       const firstPreferred = preferredLanguages[0];
       return firstPreferred || app.getLocale() || "en-US";
+    });
+    ipcMain.on("app:set-window-theme", (_event, theme: ThemeMode) => {
+      if (!mainWindow || mainWindow.isDestroyed()) {
+        return;
+      }
+      if (theme !== "light" && theme !== "dark") {
+        return;
+      }
+      applyWindowTheme(mainWindow, theme);
     });
 
     createWindow();

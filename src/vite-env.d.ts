@@ -62,7 +62,9 @@ declare module "*.vue" {
 }
 
 interface ElectronBridge {
+  platform?: string;
   getSystemLocale?: () => Promise<string>;
+  setWindowTheme?: (theme: "light" | "dark") => void;
 }
 
 interface Window {
