@@ -25,7 +25,17 @@
           </a-menu>
         </a-col>
         <a-col flex="300px" class="toolbar-col">
-          <a-space :size="12">
+          <a-space :size="12" class="toolbar-space">
+            <span class="language-label">
+              <svg class="language-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M12 2.5C12 2.5 8.5 7 8.5 12s3.5 9.5 3.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M12 2.5C12 2.5 15.5 7 15.5 12s-3.5 9.5-3.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M2.5 12h19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M3.5 8h17M3.5 16h17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="1 0"/>
+              </svg>
+              {{ t("app.language.label") }}
+            </span>
             <a-select
               v-model:value="languagePreference"
               size="small"
@@ -202,8 +212,30 @@ watch(
   -webkit-app-region: no-drag;
 }
 
+.toolbar-space {
+  align-items: center;
+}
+
 :deep(.ant-menu) {
   -webkit-app-region: no-drag;
+}
+
+.language-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-text);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.language-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.75;
 }
 
 .language-select {

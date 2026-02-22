@@ -18,6 +18,7 @@ const messages: Record<AppLocale, MessageNode> = {
         light: "浅色",
       },
       language: {
+        label: "语言",
         auto: "自动",
         zhCN: "简体中文",
         enUS: "English",
@@ -190,6 +191,7 @@ const messages: Record<AppLocale, MessageNode> = {
         light: "Light",
       },
       language: {
+        label: "Language",
         auto: "Auto",
         zhCN: "Simplified Chinese",
         enUS: "English",
